@@ -8,7 +8,7 @@
  * TOKEN: se deriva de la contraseña del panel. Si cambias la contraseña con
  * herramientas/nueva-clave.mjs, ese script te imprime el TOKEN nuevo para pegarlo aquí.
  */
-const TOKEN = 'bf0634db2aefe541289fa291fb5082f3f3ec9e9f38bdaa3923b4616becbcf98e';
+const TOKEN = '23c65e11e9b53cae2e7628c4af9116b0efe655aa4e49a5a5f6d16f5eac5f42b6';
 const HOJA = 'Invitados';
 const COLS = ['id', 'nombre', 'pases', 'mesa', 'telefono', 'estado', 'q', 'firmado', 'actualizado'];
 
