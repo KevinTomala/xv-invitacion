@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>XV Años Valentina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@500&display=swap">
+<style>
+/* Layout: una columna estrecha tipo tarjeta, abierta desde un sobre del pantano; cada bloque es un "nenúfar" del recorrido */
+:root{
+  --pond:#2f4a33;      /* verde pantano profundo */
+  --moss:#5e7d4f;      /* musgo */
+  --sage:#a9bf96;      /* salvia */
+  --mist:#eef2e6;      /* niebla clara (fondo) */
+  --paper:#f8f6ee;     /* papel */
+  --gold:#b8955a;      /* oro viejo */
+  --gold-lt:#e3cf9f;
+  --ink:#2a3526;
+  --ink-soft:#5b6852;
+  --script:"Pinyon Script","Snell Roundhand","Apple Chancery",cursive;
+  --serif:"Cormorant Garamond","Garamond","Times New Roman",serif;
+  --caps:"Cinzel","Trajan Pro","Times New Roman",serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--mist);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  overflow-x:hidden;
+}
+body.locked{overflow:hidden}
+#fireflies{position:fixed;inset:0;pointer-events:none;z-index:0}
+main{position:relative;z-index:1;max-width:460px;margin:0 auto;padding-block:28px 120px;display:flex;flex-direction:column;gap:56px}
+section{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+h2{font-family:var(--script);font-weight:400;font-size:2.6rem;line-height:1.1;color:var(--moss);margin:0;text-wrap:balance}
+.caps{font-family:var(--caps);letter-spacing:.28em;font-size:.78rem;color:var(--gold);text-transform:uppercase}
+p{margin:0;max-width:34ch;color:var(--ink-soft)}
+.divider{width:140px;height:18px;display:block;margin:0 auto}
+
+/* ===== SOBRE ===== */
+#envelope{position:fixed;inset:0;z-index:50;background:radial-gradient(ellipse at 50% 30%,#3d5c40 0%,var(--pond) 70%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  transition:opacity .9s ease .9s,visibility 0s linear 1.8s}
+#envelope.open{opacity:0;visibility:hidden}
+.env-for{color:var(--gold-lt);text-align:center;font-family:var(--serif);font-size:1.05rem;min-height:3.2em}
+.env-for b{font-family:var(--script);font-weight:400;font-size:2.1rem;display:block;color:#f3e7c6;line-height:1.1}
+.env{position:relative;width:min(340px,86vw);aspect-ratio:1.45;perspective:900px}
+.env-back{position:absolute;inset:0;background:#d8e2c9;border-radius:6px;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.env-card{position:absolute;left:7%;right:7%;top:8%;bottom:8%;background:var(--paper);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:transform 1s cubic-bezier(.3,.7,.2,1) .45s;z-index:1}
+.env-card span{font-family:var(--script);font-size:2.4rem;color:var(--moss);line-height:1}
+.env-front{position:absolute;inset:0;z-index:2;pointer-events:none}
+.env-flap{position:absolute;left:0;right:0;top:0;height:62%;transform-origin:top;z-index:3;transition:transform .7s ease,z-index 0s linear .35s}
+.env.opened .env-flap{transform:rotateX(180deg);z-index:0}
+.env.opened .env-card{transform:translateY(-58%)}
+.seal{position:absolute;left:50%;top:62%;width:86px;height:86px;transform:translate(-50%,-50%);z-index:4;border:0;padding:0;background:none;cursor:pointer;border-radius:50%;
+  transition:transform .4s ease,opacity .3s ease;animation:pulse 2.4s ease-in-out infinite}
+.seal:focus-visible{outline:3px solid var(--gold-lt);outline-offset:4px}
+.env.opened .seal{opacity:0;transform:translate(-50%,-50%) scale(.6)}
+@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.06)}}
+.env-hint{color:var(--sage);font-family:var(--caps);letter-spacing:.25em;font-size:.72rem;text-transform:uppercase}
+
+/* ===== HERO ===== */
+.hero{gap:6px;padding-top:10px}
+.hero .frog{width:170px;height:auto;margin-bottom:4px;animation:bob 4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.name{font-family:var(--script);font-size:clamp(4rem,19vw,5.6rem);line-height:.95;color:var(--pond);margin:6px 0 2px;font-weight:400}
+.xv{font-family:var(--caps);letter-spacing:.42em;color:var(--gold);font-size:.95rem;padding-left:.42em}
+.quote{font-style:italic;font-size:1.12rem;margin-top:16px}
+
+/* ===== CUENTA REGRESIVA ===== */
+.count{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%}
+.count div{background:var(--paper);border:1px solid var(--sage);border-radius:50% 50% 12px 12px / 38% 38% 12px 12px;padding:16px 4px 10px;display:flex;flex-direction:column;align-items:center}
+.count b{font-family:var(--serif);font-weight:600;font-size:2rem;line-height:1;color:var(--pond);font-variant-numeric:tabular-nums}
+.count small{font-family:var(--caps);font-size:.6rem;letter-spacing:.18em;color:var(--gold);margin-top:6px}
+
+/* ===== CUÁNDO / DÓNDE ===== */
+.when{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.arch{border-radius:999px 999px 14px 14px;padding:34px 10px 22px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.arch svg{width:34px;height:34px}
+.arch .big{font-family:var(--serif);font-size:1.5rem;font-weight:600;line-height:1.15}
+.arch .sm{font-family:var(--caps);font-size:.66rem;letter-spacing:.2em}
+.arch.gold{background:var(--gold);color:#fbf5e6}
+.arch.green{background:var(--moss);color:#f2f5ea}
+.stamp{width:100%;background:var(--moss);color:#f2f5ea;padding:26px 18px;position:relative;border-radius:8px;
+  box-shadow:inset 0 0 0 7px var(--moss),inset 0 0 0 8px var(--gold-lt);display:flex;flex-direction:column;align-items:center;gap:6px}
+.stamp .big{font-family:var(--caps);font-size:1rem;letter-spacing:.12em}
+.stamp .sm{font-size:1rem;opacity:.9}
+
+/* ===== BOTONES ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--caps);letter-spacing:.18em;font-size:.78rem;text-transform:uppercase;
+  text-decoration:none;color:#fff;background:var(--pond);border:0;border-radius:999px;padding:15px 26px;cursor:pointer;transition:transform .15s ease,background .2s}
+.btn:hover{background:#3b5c3f;transform:translateY(-1px)}
+.btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.btn svg{width:18px;height:18px}
+.btn.wa{background:#2f7d4a;width:100%}
+.btn.wa:hover{background:#286b40}
+
+/* ===== MAPA ===== */
+.mapcard{width:100%;border-radius:18px;overflow:hidden;border:1px solid var(--sage);background:var(--paper);text-decoration:none;color:inherit;display:block}
+.mapcard svg{display:block;width:100%;height:auto}
+.mapcard .meta{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left}
+.mapcard .meta b{font-family:var(--serif);font-size:1.1rem;color:var(--pond);display:block}
+.mapcard .meta span{font-size:.92rem;color:var(--ink-soft)}
+.mapcard .go{font-family:var(--caps);font-size:.66rem;letter-spacing:.18em;color:var(--gold);white-space:nowrap}
+
+/* ===== GALERÍA ===== */
+.gallery{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.ph{aspect-ratio:3/4;max-width:100%;background:linear-gradient(160deg,#486a4a,#24382a);border:6px solid var(--paper);outline:1px solid var(--sage);
+  box-shadow:0 10px 24px rgba(40,60,40,.18);display:flex;align-items:center;justify-content:center;color:var(--gold-lt);font-family:var(--caps);font-size:.68rem;letter-spacing:.2em;overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph:nth-child(1){transform:rotate(-3deg)}
+.ph:nth-child(2){transform:rotate(2.5deg) translateY(14px)}
+.ph:nth-child(3){grid-column:1/-1;aspect-ratio:4/3;width:82%;justify-self:center;transform:rotate(-1.5deg)}
+
+/* ===== VESTIMENTA ===== */
+.swatches{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.swatches i{width:30px;height:30px;border-radius:50%;border:2px solid var(--paper);outline:1px solid var(--sage)}
+
+/* ===== RSVP ===== */
+form{width:100%;background:var(--paper);border:1px solid var(--sage);border-radius:22px;padding:24px 20px;display:flex;flex-direction:column;gap:16px;text-align:left}
+label.lbl{font-family:var(--caps);font-size:.68rem;letter-spacing:.2em;color:var(--gold);display:block;margin-bottom:6px}
+input[type=text],select{width:100%;font-family:var(--serif);font-size:1.15rem;color:var(--ink);background:#fff;border:1px solid var(--sage);border-radius:12px;padding:12px 14px}
+input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice input{position:absolute;opacity:0;pointer-events:none}
+.choice label{display:flex;align-items:center;justify-content:center;text-align:center;min-height:56px;padding:10px;border-radius:12px;border:1px solid var(--sage);background:#fff;cursor:pointer;font-size:1.05rem;line-height:1.2;transition:background .2s,color .2s}
+.choice input:checked+label{background:var(--moss);color:#fff;border-color:var(--moss)}
+.choice input:focus-visible+label{outline:2px solid var(--gold);outline-offset:2px}
+.err{color:#9b3b2e;font-size:.98rem;min-height:1.2em;margin:-6px 0 0}
+.wa-num{font-size:.9rem;color:var(--ink-soft);text-align:center;max-width:none}
+.wa-num span{user-select:all;font-variant-numeric:tabular-nums}
+
+/* ===== MÚSICA ===== */
+#music{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;width:52px;height:52px;border-radius:50%;border:1px solid var(--gold);
+  background:var(--paper);color:var(--pond);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 18px rgba(30,50,30,.2)}
+#music svg{width:22px;height:22px}
+#music.on svg{animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.end .name{font-size:3.4rem}
+/* Decoración del tema */
+.corner{position:absolute;top:-6px;width:150px;pointer-events:none;opacity:.95}
+.corner.r{right:-26px}
+.corner.l{left:-26px;transform:scaleX(-1)}
+.scene{position:relative;width:100%;border-radius:22px;overflow:hidden;box-shadow:0 18px 40px rgba(20,38,28,.28)}
+.scene img{display:block;width:100%;height:auto}
+.scene figcaption{position:absolute;left:0;right:0;top:0;padding:18px 20px;color:#f4e9c4;text-align:center;
+  background:linear-gradient(#14261ccc,#14261c00)}
+.scene figcaption b{display:block;font-family:var(--script);font-weight:400;font-size:2.2rem;line-height:1.1}
+.scene figcaption span{font-size:1rem;opacity:.9}
+.lily{width:100%;max-width:420px;height:auto;display:block;margin:0 auto -20px}
+.env-girl{position:absolute;left:-10%;bottom:-6%;height:104%;width:auto;z-index:3;pointer-events:none;filter:drop-shadow(0 10px 18px rgba(0,0,0,.35));transition:opacity .5s ease}
+.env.opened .env-girl{opacity:0}
+.hero-girl{height:300px;width:auto;max-width:100%;margin-bottom:4px;filter:drop-shadow(0 12px 20px rgba(47,74,51,.25))}
+.side-char{position:relative;width:100%}
+.side-char > img{position:absolute;pointer-events:none;height:auto}
+.gator{width:120px;left:-14px;top:-30px}
+.when-wrap{padding-top:70px}
+.how{display:flex;align-items:center;gap:8px;text-align:left}
+.how img{width:96px;height:auto;flex:none}
+.how div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.how h2{font-size:2.1rem;white-space:nowrap}
+.how p{font-size:1rem}
+.frogs{width:240px;max-width:80%;height:auto}
+.portrait{width:190px;height:190px;border-radius:50%;object-fit:cover;object-position:50% 20%;background:radial-gradient(circle at 50% 40%,#f8f6ee,#cfdcbc);
+  border:3px solid var(--gold-lt);box-shadow:0 0 0 8px var(--paper),0 0 0 9px var(--sage)}
+.ph.empty{background:linear-gradient(160deg,#486a4a,#24382a)}
+.reveal{animation:rise .9s ease both}
+@keyframes rise{from{transform:translateY(14px);opacity:.0001}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<meta name="description" content="Te invito a celebrar mis XV años. Abre tu invitación.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mis XV Años · Valentina">
+<meta property="og:description" content="Te invito a celebrar conmigo. Toca para abrir tu invitación.">
+<!-- Cambia TU-DOMINIO por el link final (ej. https://xv-valentina.vercel.app) -->
+<meta property="og:image" content="https://TU-DOMINIO/portada.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#2f4a33">
+</head>
+<body>
+
+<canvas id="fireflies" aria-hidden="true"></canvas>
+
+<!-- ===== SOBRE ===== -->
+<div id="envelope" role="dialog" aria-label="Invitación cerrada">
+  <div class="env-for" id="envFor"></div>
+  <div class="env" id="env">
+    <div class="env-back"></div>
+    <div class="env-card"><span data-f="nombre"></span><div class="caps" style="font-size:.6rem">Mis XV años</div></div>
+    <svg class="env-front" viewBox="0 0 340 234" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 0 L170 130 L340 0 L340 234 L0 234 Z" fill="#6f8e5e"/>
+      <path d="M0 234 L170 120 L340 234 Z" fill="#5e7d4f"/>
+    </svg>
+    <svg class="env-flap" viewBox="0 0 340 145" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 0 L340 0 L170 145 Z" fill="#7d9b6b"/>
+    </svg>
+    <img class="env-girl" src="decoracion/personajes/princesa.png" alt="" aria-hidden="true">
+    <button class="seal" id="seal" aria-label="Abrir invitación">
+      <svg viewBox="0 0 100 100">
+        <defs><radialGradient id="wax" cx="40%" cy="35%"><stop offset="0" stop-color="#e6cd8f"/><stop offset=".6" stop-color="#b8955a"/><stop offset="1" stop-color="#8a6a36"/></radialGradient></defs>
+        <path d="M50 3c8 0 10 5 17 7s12 1 16 8 0 11 3 18 8 9 7 17-6 9-8 16-1 12-8 16-11-1-18 2-9 8-17 8-10-5-17-8-12 2-17-4-1-12-4-18-8-9-8-17 6-10 7-17-2-12 4-17 11-1 17-4 10-7 17-7z" fill="url(#wax)"/>
+        <circle cx="50" cy="50" r="31" fill="none" stroke="#8a6a36" stroke-width="1.5" opacity=".7"/>
+        <text x="50" y="62" text-anchor="middle" font-family="Cinzel,serif" font-size="30" fill="#7a5b2c">XV</text>
+        <path d="M37 33 l5 -9 4 6 4 -9 4 9 4 -6 5 9z" fill="#7a5b2c"/>
+      </svg>
+    </button>
+  </div>
+  <div class="env-hint">Toca el sello para abrir</div>
+</div>
+
+<button id="music" aria-label="Pausar música" hidden>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
+</button>
+
+<main id="main" aria-hidden="true">
+  <img class="corner r" src="decoracion/flores-esquina.svg" alt="" aria-hidden="true">
+  <img class="corner l" src="decoracion/flores-esquina.svg" alt="" aria-hidden="true">
+
+  <!-- HERO -->
+  <section class="hero">
+    <img class="hero-girl" src="decoracion/personajes/princesa.png" alt="Princesa con un sapito en la mano">
+    <div class="caps">Te invito a celebrar</div>
+    <h1 class="name" data-f="nombre"></h1>
+    <div class="xv">MIS XV AÑOS</div>
+    <p class="quote" data-f="frase"></p>
+  </section>
+
+  <!-- GALERÍA -->
+  <section>
+    <h2>Mis momentos</h2>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <!-- ESCENA DEL PANTANO -->
+  <figure class="scene" style="margin:0">
+    <img src="decoracion/pantano-noche.svg" alt="Pantano de noche con luna, cipreses, nenúfares, luciérnagas y un sapito con corona" loading="lazy">
+    <figcaption><b>Una noche mágica</b><span>donde los sueños se cumplen</span></figcaption>
+  </figure>
+
+  <!-- CUENTA REGRESIVA -->
+  <section>
+    <h2>¿Cuánto falta?</h2>
+    <div class="count" role="timer" aria-live="off">
+      <div><b id="cd-d">00</b><small>DÍAS</small></div>
+      <div><b id="cd-h">00</b><small>HORAS</small></div>
+      <div><b id="cd-m">00</b><small>MIN</small></div>
+      <div><b id="cd-s">00</b><small>SEG</small></div>
+    </div>
+  </section>
+
+  <!-- CUÁNDO -->
+  <section>
+    <div class="side-char when-wrap">
+      <img class="gator" src="decoracion/personajes/lagarto.png" alt="" aria-hidden="true">
+      <h2>Te espero</h2>
+    </div>
+    <div class="when">
+      <div class="arch gold">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+        <span class="sm" data-f="diaSemana"></span>
+        <span class="big" data-f="fechaCorta"></span>
+      </div>
+      <div class="arch green">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <span class="sm">A LAS</span>
+        <span class="big" data-f="hora"></span>
+      </div>
+    </div>
+    <div class="stamp">
+      <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0114 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+      <span class="big" data-f="lugar"></span>
+      <span class="sm" data-f="ciudad"></span>
+    </div>
+  </section>
+
+  <img class="lily" src="decoracion/nenufares.svg" alt="" aria-hidden="true">
+
+  <!-- MAPA -->
+  <section>
+    <div class="how">
+      <img src="decoracion/personajes/sapo.png" alt="" aria-hidden="true">
+      <div><h2>¿Cómo llegar?</h2><p>Toca el mapa para abrir la ubicación en Google Maps.</p></div>
+    </div>
+    <a class="mapcard" id="mapLink" target="_blank" rel="noopener">
+      <svg viewBox="0 0 400 190" aria-hidden="true">
+        <rect width="400" height="190" fill="#e4ecd8"/>
+        <path d="M-10 140 C80 120 120 160 210 130 S340 90 410 110" stroke="#fff" stroke-width="14" fill="none"/>
+        <path d="M120 -10 C130 60 110 120 140 200" stroke="#fff" stroke-width="9" fill="none"/>
+        <path d="M290 -10 C280 50 300 90 270 200" stroke="#fff" stroke-width="7" fill="none"/>
+        <path d="M-10 60 C90 70 200 40 410 55" stroke="#fff" stroke-width="6" fill="none"/>
+        <ellipse cx="350" cy="160" rx="70" ry="40" fill="#b9d3d6"/>
+        <circle cx="60" cy="40" r="18" fill="#cfdcbc"/><circle cx="230" cy="170" r="14" fill="#cfdcbc"/>
+        <g transform="translate(205 92)">
+          <ellipse cx="0" cy="34" rx="14" ry="4" fill="#2f4a33" opacity=".25"/>
+          <path d="M0 32 C-16 10 -20 0 -20 -8 a20 20 0 0140 0 C20 0 16 10 0 32z" fill="#2f4a33"/>
+          <circle cx="0" cy="-8" r="8" fill="#e3cf9f"/>
+        </g>
+      </svg>
+      <div class="meta"><div><b data-f="lugar"></b><span data-f="ciudad"></span></div><span class="go">Abrir mapa →</span></div>
+    </a>
+  </section>
+
+
+  <!-- VESTIMENTA -->
+  <section>
+    <h2>Código de vestimenta</h2>
+    <div class="caps" data-f="vestimenta"></div>
+    <div class="swatches" aria-hidden="true"><i style="background:#2f4a33"></i><i style="background:#5e7d4f"></i><i style="background:#b8955a"></i><i style="background:#e3cf9f"></i><i style="background:#f8f6ee"></i></div>
+    <p data-f="notaVestimenta"></p>
+  </section>
+
+  <!-- REGALOS -->
+  <section>
+    <img class="frogs" src="decoracion/personajes/sapos.png" alt="" aria-hidden="true">
+    <h2>Regalos</h2>
+    <p data-f="regalos"></p>
+  </section>
+
+  <img class="lily" src="decoracion/nenufares.svg" alt="" aria-hidden="true">
+
+  <!-- RSVP -->
+  <section id="rsvp">
+    <h2>Confirma tu asistencia</h2>
+    <p>Llena estos datos y tu confirmación se enviará por WhatsApp.</p>
+    <form id="form" novalidate>
+      <div>
+        <label class="lbl" for="g-name">Tu nombre</label>
+        <input type="text" id="g-name" autocomplete="name" placeholder="Ej. Familia Rodríguez">
+      </div>
+      <div>
+        <span class="lbl">¿Vas a asistir?</span>
+        <div class="choice">
+          <input type="radio" name="att" id="att-yes" value="si" checked><label for="att-yes">¡Sí, ahí estaré!</label>
+          <input type="radio" name="att" id="att-no" value="no"><label for="att-no">No podré ir</label>
+        </div>
+      </div>
+      <div id="paxWrap">
+        <label class="lbl" for="g-pax">Número de personas</label>
+        <select id="g-pax"></select>
+      </div>
+      <p class="err" id="err" role="alert"></p>
+      <a class="btn wa" id="waBtn" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm5.6 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.2-.2-1.2-1.6-1.2-3s.8-2.2 1-2.5c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>
+        Enviar confirmación
+      </a>
+      <p class="wa-num">Se envía al WhatsApp <span data-f="whatsappTxt"></span></p>
+    </form>
+  </section>
+
+  <section class="end">
+    <img class="portrait" src="decoracion/personajes/princesa-retrato.png" alt="Princesa con un sapito" loading="lazy">
+    <svg class="divider" viewBox="0 0 140 18" aria-hidden="true"><path d="M0 9h55M85 9h55" stroke="#b8955a"/><ellipse cx="70" cy="9" rx="9" ry="6" fill="#7aa35b"/><path d="M64 4l2-4 2 3 2-3 2 3 2-3 2 4z" fill="#b8955a"/></svg>
+    <p>Con todo mi cariño,</p>
+    <div class="name" data-f="nombre"></div>
+  </section>
+</main>
+
+<script>
+/* ============================================================
+   DATOS DE LA INVITACIÓN — edita solo este bloque
+   ============================================================ */
+const CONFIG = {
+  nombre: "Valentina",
+  fechaISO: "2026-12-12T20:00:00-05:00",       // fecha y hora del evento (hora de Ecuador)
+  diaSemana: "SÁBADO",
+  fechaCorta: "12 / 12",
+  fechaLarga: "sábado 12 de diciembre",
+  hora: "20:00",
+  lugar: "Salón de Eventos Colibrí",
+  ciudad: "Santa Elena, Ecuador",
+  mapa: "https://maps.app.goo.gl/FktU5XPHzKp8ZDXv8",
+  whatsapp: "593959534224",                      // sin + ni espacios
+  whatsappTxt: "+593 95 953 4224",
+  frase: "Hay sueños que se cumplen con un beso de valentía. Te espero para celebrar el mío.",
+  vestimenta: "Formal",
+  notaVestimenta: "El verde esmeralda queda reservado para la quinceañera.",
+  regalos: "El mejor regalo es tu presencia. Si deseas tener un detalle conmigo, habrá lluvia de sobres.",
+  fotos: ["fotos/foto1.jpg","fotos/foto2.jpg","fotos/foto3.jpg"],   // pon las fotos en la carpeta /fotos con estos nombres
+  musica: "",         // ej. "cancion.mp3" — si queda vacío suena una cajita musical
+  maxPersonas: 5
+};
+</script>
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const qs = new URLSearchParams(location.search);
+  const guest = (qs.get("para") || "").trim();
+  const pases = parseInt(qs.get("pases") || "", 10);
+
+  document.querySelectorAll("[data-f]").forEach(el => { el.textContent = CONFIG[el.dataset.f] || ""; });
+  $("#mapLink").href = CONFIG.mapa;
+
+  // Sobre personalizado: ?para=Familia%20Pérez&pases=3
+  $("#envFor").innerHTML = guest
+    ? 'Invitación especial para<b></b>' + (pases > 0 ? (pases === 1 ? "1 pase" : pases + " pases") : "")
+    : "Tienes una invitación";
+  if (guest) $("#envFor b").textContent = guest;
+  if (guest) $("#g-name").value = guest;
+
+  const maxP = pases > 0 ? pases : CONFIG.maxPersonas;
+  for (let i = 1; i <= maxP; i++) { const o = document.createElement("option"); o.value = i; o.textContent = i === 1 ? "1 persona" : i + " personas"; $("#g-pax").appendChild(o); }
+  if (pases > 0) $("#g-pax").value = pases;
+
+  // Galería
+  const g = $("#gallery");
+  for (let i = 0; i < 3; i++) {
+    const d = document.createElement("div"); d.className = "ph";
+    const empty = () => { d.classList.add("empty"); d.textContent = "Foto " + (i + 1); };
+    if (CONFIG.fotos[i]) { const im = document.createElement("img"); im.alt = "Foto de " + CONFIG.nombre; im.loading = "lazy"; im.onerror = () => { im.remove(); empty(); }; im.src = CONFIG.fotos[i]; d.appendChild(im); }
+    else empty();
+    g.appendChild(d);
+  }
+
+  // Cuenta regresiva
+  const target = new Date(CONFIG.fechaISO).getTime();
+  const pad = n => String(n).padStart(2, "0");
+  function tick(){
+    let t = Math.max(0, target - Date.now()) / 1000;
+    $("#cd-d").textContent = pad(Math.floor(t / 86400)); t %= 86400;
+    $("#cd-h").textContent = pad(Math.floor(t / 3600)); t %= 3600;
+    $("#cd-m").textContent = pad(Math.floor(t / 60));
+    $("#cd-s").textContent = pad(Math.floor(t % 60));
+  }
+  tick(); setInterval(tick, 1000);
+
+  // Mensaje de WhatsApp
+  function buildMsg(){
+    const name = $("#g-name").value.trim();
+    const yes = $("#att-yes").checked;
+    const n = parseInt($("#g-pax").value, 10);
+    if (yes) {
+      return `¡Hola! 👑🐸 Soy *${name}* y confirmo con mucha alegría que *SÍ asistiré* a los XV años de ${CONFIG.nombre}.\n` +
+             `Asistiremos: ${n} ${n === 1 ? "persona" : "personas"}.\n` +
+             `¡Nos vemos el ${CONFIG.fechaLarga} a las ${CONFIG.hora} en ${CONFIG.lugar}! ✨`;
+    }
+    return `Hola, soy *${name}*. Lamento mucho no poder asistir a los XV años de ${CONFIG.nombre}. ` +
+           `Le deseo una noche mágica e inolvidable. 💚`;
+  }
+  function refresh(){
+    $("#paxWrap").hidden = !$("#att-yes").checked;
+    $("#waBtn").href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(buildMsg());
+    if ($("#g-name").value.trim()) $("#err").textContent = "";
+  }
+  ["input","change"].forEach(ev => $("#form").addEventListener(ev, refresh));
+  $("#form").addEventListener("submit", e => e.preventDefault());
+  $("#waBtn").addEventListener("click", e => {
+    if (!$("#g-name").value.trim()) { e.preventDefault(); $("#err").textContent = "Escribe tu nombre para confirmar."; $("#g-name").focus(); }
+  });
+  refresh();
+
+  // Música: archivo propio o cajita musical generada
+  let playing = false, audioEl = null, ctx = null, timer = null;
+  const melody = [ // vals 3/4 (nota MIDI, tiempos)
+    [72,1],[76,1],[79,1],[77,2],[76,1],[74,1],[72,1],[71,1],[72,3],
+    [69,1],[72,1],[76,1],[74,2],[72,1],[71,1],[67,1],[69,1],[67,3],
+    [72,1],[76,1],[79,1],[81,2],[79,1],[77,1],[76,1],[74,1],[76,3],
+    [74,1],[72,1],[71,1],[72,1],[76,1],[74,1],[72,3],[0,3]];
+  const bass = [48,55,52,53,48,45,43,48];
+  function note(f, t, d, v){
+    const o = ctx.createOscillator(), g2 = ctx.createGain();
+    o.type = "sine"; o.frequency.value = f;
+    g2.gain.setValueAtTime(0, t); g2.gain.linearRampToValueAtTime(v, t + .01); g2.gain.exponentialRampToValueAtTime(.0001, t + d);
+    o.connect(g2).connect(ctx.destination); o.start(t); o.stop(t + d + .05);
+  }
+  const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+  function loop(){
+    const beat = .42; let t = ctx.currentTime + .1, i = 0;
+    melody.forEach(([m, b]) => { if (m) { note(hz(m), t, b * beat + .8, .12); note(hz(m) * 2, t, .5, .02); } t += b * beat; });
+    for (let k = 0, bt = ctx.currentTime + .1; k < 12; k++, bt += beat * 3) note(hz(bass[k % bass.length]), bt, 1.2, .06);
+    timer = setTimeout(loop, (t - ctx.currentTime) * 1000);
+  }
+  function startMusic(){
+    try {
+      if (CONFIG.musica) { audioEl = audioEl || new Audio(CONFIG.musica); audioEl.loop = true; audioEl.play().catch(()=>{}); }
+      else { ctx = ctx || new (window.AudioContext || window.webkitAudioContext)(); ctx.resume(); if (!timer) loop(); }
+      playing = true;
+    } catch(e) { playing = false; }
+    syncBtn();
+  }
+  function stopMusic(){
+    if (audioEl) audioEl.pause();
+    if (ctx) { ctx.suspend(); }
+    playing = false; syncBtn();
+  }
+  function syncBtn(){ const b = $("#music"); b.classList.toggle("on", playing); b.setAttribute("aria-label", playing ? "Pausar música" : "Reproducir música"); }
+  $("#music").addEventListener("click", () => playing ? stopMusic() : startMusic());
+
+  // Abrir sobre
+  document.body.classList.add("locked");
+  $("#seal").addEventListener("click", () => {
+    $("#env").classList.add("opened");
+    startMusic();
+    setTimeout(() => {
+      $("#envelope").classList.add("open");
+      document.body.classList.remove("locked");
+      $("#main").removeAttribute("aria-hidden");
+      $("#music").hidden = false;
+      document.querySelectorAll("main > section").forEach((s, i) => { s.style.animationDelay = (i * .08) + "s"; s.classList.add("reveal"); });
+    }, 1500);
+  });
+
+  // Luciérnagas
+  const cv = $("#fireflies"), c = cv.getContext("2d");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let W, H, flies = [];
+  function size(){ W = cv.width = innerWidth * devicePixelRatio; H = cv.height = innerHeight * devicePixelRatio; cv.style.width = innerWidth + "px"; cv.style.height = innerHeight + "px"; }
+  size(); addEventListener("resize", size);
+  for (let i = 0; i < 26; i++) flies.push({ x: Math.random(), y: Math.random(), a: Math.random() * 6.28, s: .0004 + Math.random() * .0006, p: Math.random() * 6.28 });
+  function draw(time){
+    c.clearRect(0, 0, W, H);
+    flies.forEach(f => {
+      if (!reduce) { f.a += (Math.random() - .5) * .2; f.x = (f.x + Math.cos(f.a) * f.s + 1) % 1; f.y = (f.y + Math.sin(f.a) * f.s + 1) % 1; }
+      const glow = .35 + .65 * Math.max(0, Math.sin(time / 900 + f.p));
+      const x = f.x * W, y = f.y * H, r = 9 * devicePixelRatio;
+      const grd = c.createRadialGradient(x, y, 0, x, y, r);
+      grd.addColorStop(0, `rgba(240,214,120,${.85 * glow})`); grd.addColorStop(1, "rgba(240,214,120,0)");
+      c.fillStyle = grd; c.beginPath(); c.arc(x, y, r, 0, 6.28); c.fill();
+    });
+    if (!reduce) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
+
+</body>
+</html>

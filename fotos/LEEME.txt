@@ -1,0 +1,9 @@
+Pon aquí las fotos de la quinceañera con estos nombres EXACTOS (minúsculas, .jpg):
+
+  foto1.jpg  -> vertical (3:4). Aparece arriba a la izquierda, inclinada.
+  foto2.jpg  -> vertical (3:4). Arriba a la derecha.
+  foto3.jpg  -> horizontal (4:3). Abajo, más grande.
+
+Recomendado: ~1080 px de ancho y menos de 300 KB cada una (comprímelas en squoosh.app o tinyjpg.com).
+Si una foto no existe, la invitación muestra un marco vacío en su lugar.
+Si quieres música: pon cancion.mp3 en la carpeta principal (junto a index.html).
