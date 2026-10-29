@@ -3,51 +3,94 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>XV Años Valentina</title>
+<title>XV Años Kyara</title>
+<meta name="description" content="Kyara Pita Correa te invita a celebrar sus XV años. Abre tu invitación.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mis XV Años · Kyara">
+<meta property="og:description" content="Sábado 14 de noviembre · 8:00 PM. Toca para abrir tu invitación.">
+<!-- Cambia TU-DOMINIO por el link final (ej. https://kevintomala.github.io/xv-invitacion) -->
+<meta property="og:image" content="https://TU-DOMINIO/portada.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#2f4a33">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@500&display=swap">
 <style>
-/* Layout: una columna estrecha tipo tarjeta, abierta desde un sobre del pantano; cada bloque es un "nenúfar" del recorrido */
+/* Layout: una columna tipo tarjeta que se abre desde un sobre del pantano; cada bloque aparece con su transición */
 :root{
-  --pond:#2f4a33;      /* verde pantano profundo */
-  --moss:#5e7d4f;      /* musgo */
-  --sage:#a9bf96;      /* salvia */
-  --mist:#eef2e6;      /* niebla clara (fondo) */
-  --paper:#f8f6ee;     /* papel */
-  --gold:#b8955a;      /* oro viejo */
-  --gold-lt:#e3cf9f;
-  --ink:#2a3526;
-  --ink-soft:#5b6852;
+  --pond:#2f4a33; --moss:#5e7d4f; --sage:#a9bf96; --mist:#eef2e6; --paper:#f8f6ee;
+  --gold:#b8955a; --gold-lt:#e3cf9f; --ink:#2a3526; --ink-soft:#5b6852; --iris:#6a56a8;
   --script:"Pinyon Script","Snell Roundhand","Apple Chancery",cursive;
   --serif:"Cormorant Garamond","Garamond","Times New Roman",serif;
   --caps:"Cinzel","Trajan Pro","Times New Roman",serif;
   color-scheme:light;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  background:var(--mist);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.55;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  overflow-x:hidden;
-}
-body.locked{overflow:hidden}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{margin:0;background:var(--mist);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.55;overflow-x:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body.locked{overflow:hidden;height:100vh}
+img{max-width:100%}
+[hidden]{display:none!important}
 #fireflies{position:fixed;inset:0;pointer-events:none;z-index:0}
-main{position:relative;z-index:1;max-width:460px;margin:0 auto;padding-block:28px 120px;display:flex;flex-direction:column;gap:56px}
-section{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
-h2{font-family:var(--script);font-weight:400;font-size:2.6rem;line-height:1.1;color:var(--moss);margin:0;text-wrap:balance}
+.moss-top{position:fixed;left:0;right:0;top:0;height:64px;opacity:.85;width:100%;z-index:2;pointer-events:none;transform-origin:top;animation:mossSway 7s ease-in-out infinite}
+main{position:relative;z-index:1;max-width:460px;margin:0 auto;padding-block:90px 120px;display:flex;flex-direction:column;gap:64px}
+section{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+h2{font-family:var(--script);font-weight:400;font-size:2.8rem;line-height:1.1;color:var(--moss);margin:0;text-wrap:balance}
 .caps{font-family:var(--caps);letter-spacing:.28em;font-size:.78rem;color:var(--gold);text-transform:uppercase}
 p{margin:0;max-width:34ch;color:var(--ink-soft)}
-.divider{width:140px;height:18px;display:block;margin:0 auto}
+
+/* ===== MOVIMIENTO ===== */
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes sway{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}
+@keyframes swayBig{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(5deg)}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+@keyframes hop{0%,70%,100%{transform:translateY(0) scale(1,1)}76%{transform:translateY(0) scale(1.06,.92)}84%{transform:translateY(-22px) scale(.96,1.05)}92%{transform:translateY(0) scale(1.04,.95)}}
+@keyframes point{0%,100%{transform:rotate(0)}20%{transform:rotate(-4deg)}40%{transform:rotate(2deg)}60%{transform:rotate(-3deg)}}
+@keyframes mossSway{0%,100%{transform:skewX(-1.5deg)}50%{transform:skewX(1.5deg)}}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:1;transform:scale(1) rotate(90deg)}}
+.m-float{animation:float 4.5s ease-in-out infinite}
+.m-sway{transform-origin:50% 100%;animation:sway 5s ease-in-out infinite}
+.m-breathe{transform-origin:50% 100%;animation:breathe 3.8s ease-in-out infinite}
+.m-hop{transform-origin:50% 100%;animation:hop 3.6s ease-in-out infinite}
+.m-point{transform-origin:40% 90%;animation:point 2.8s ease-in-out infinite}
+.wrap-float{animation:float 5s ease-in-out infinite}
+.sparkles{position:absolute;inset:0;pointer-events:none}
+.sparkles i{position:absolute;width:14px;height:14px;background:radial-gradient(circle,#fff6d0 0 18%,transparent 20%),
+  conic-gradient(from 0deg,transparent 0 40deg,#f3dc95 45deg,transparent 50deg 130deg,#f3dc95 135deg,transparent 140deg 220deg,#f3dc95 225deg,transparent 230deg 310deg,#f3dc95 315deg,transparent 320deg);
+  border-radius:50%;animation:twinkle 2.6s ease-in-out infinite}
+
+/* Revelado al hacer scroll (solo si hay JS y animaciones) */
+.anim .rv{opacity:0;transform:translateY(26px);filter:blur(4px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1),filter .9s ease}
+.anim .rv.in{opacity:1;transform:none;filter:none}
+.anim .rv-zoom{opacity:0;transform:scale(.85);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.8,.2,1.2)}
+.anim .rv-zoom.in{opacity:1;transform:none}
+.anim .rv-left{opacity:0;transform:translateX(-40px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.anim .rv-right{opacity:0;transform:translateX(40px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.anim .rv-left.in,.anim .rv-right.in{opacity:1;transform:none}
+.split .ch{display:inline-block;white-space:pre}
+.anim .split .ch{opacity:0;transform:translateY(.4em) rotate(-8deg);filter:blur(3px);transition:opacity .5s ease,transform .6s cubic-bezier(.2,.7,.2,1),filter .5s ease}
+.anim .split.in .ch{opacity:1;transform:none;filter:none}
+
+/* ===== FLORES ===== */
+.fl{position:absolute;pointer-events:none;z-index:0;height:auto}
+.fl.sw{animation:swayBig 7s ease-in-out infinite}
+.fl.sw2{animation:sway 6s ease-in-out infinite}
+.fl.tl{transform-origin:0 0}.fl.tr{transform-origin:100% 0}.fl.bl{transform-origin:0 100%}.fl.br{transform-origin:100% 100%}
+section > *:not(.fl){position:relative;z-index:1}
 
 /* ===== SOBRE ===== */
-#envelope{position:fixed;inset:0;z-index:50;background:radial-gradient(ellipse at 50% 30%,#3d5c40 0%,var(--pond) 70%);
+#envelope{position:fixed;inset:0;z-index:50;background:radial-gradient(ellipse at 50% 30%,#3d5c40 0%,var(--pond) 70%);overflow:hidden;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
   padding:calc(24px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
   transition:opacity .9s ease .9s,visibility 0s linear 1.8s}
 #envelope.open{opacity:0;visibility:hidden}
-.env-for{color:var(--gold-lt);text-align:center;font-family:var(--serif);font-size:1.05rem;min-height:3.2em}
-.env-for b{font-family:var(--script);font-weight:400;font-size:2.1rem;display:block;color:#f3e7c6;line-height:1.1}
-.env{position:relative;width:min(340px,86vw);aspect-ratio:1.45;perspective:900px}
+#envelope .fl{opacity:.95}
+.env-for{color:var(--gold-lt);text-align:center;font-size:1.05rem;min-height:3.4em;position:relative;z-index:2}
+.env-for b{font-family:var(--script);font-weight:400;font-size:2.3rem;display:block;color:#f3e7c6;line-height:1.15}
+.env-for small{display:block;font-family:var(--caps);letter-spacing:.2em;font-size:.7rem;color:var(--sage);margin-top:4px}
+.env{position:relative;width:min(330px,82vw);aspect-ratio:1.45;perspective:900px;z-index:2}
 .env-back{position:absolute;inset:0;background:#d8e2c9;border-radius:6px;box-shadow:0 30px 60px rgba(0,0,0,.35)}
 .env-card{position:absolute;left:7%;right:7%;top:8%;bottom:8%;background:var(--paper);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;
   transition:transform 1s cubic-bezier(.3,.7,.2,1) .45s;z-index:1}
@@ -56,56 +99,31 @@ p{margin:0;max-width:34ch;color:var(--ink-soft)}
 .env-flap{position:absolute;left:0;right:0;top:0;height:62%;transform-origin:top;z-index:3;transition:transform .7s ease,z-index 0s linear .35s}
 .env.opened .env-flap{transform:rotateX(180deg);z-index:0}
 .env.opened .env-card{transform:translateY(-58%)}
-.seal{position:absolute;left:50%;top:62%;width:86px;height:86px;transform:translate(-50%,-50%);z-index:4;border:0;padding:0;background:none;cursor:pointer;border-radius:50%;
-  transition:transform .4s ease,opacity .3s ease;animation:pulse 2.4s ease-in-out infinite}
+.env-girl{position:absolute;left:-14%;bottom:-8%;height:108%;width:auto;z-index:3;pointer-events:none;filter:drop-shadow(0 10px 18px rgba(0,0,0,.35));transition:opacity .5s ease}
+.env-boy{position:absolute;right:-10%;bottom:-8%;height:112%;width:auto;z-index:3;pointer-events:none;filter:drop-shadow(0 10px 18px rgba(0,0,0,.35));transition:opacity .5s ease}
+.env.opened .env-girl,.env.opened .env-boy{opacity:0}
+.seal{position:absolute;left:50%;top:62%;width:84px;height:84px;margin:-42px 0 0 -42px;z-index:4;border:0;padding:0;background:none;cursor:pointer;border-radius:50%;
+  transition:transform .4s ease,opacity .3s ease;animation:breathe 2.4s ease-in-out infinite}
 .seal:focus-visible{outline:3px solid var(--gold-lt);outline-offset:4px}
-.env.opened .seal{opacity:0;transform:translate(-50%,-50%) scale(.6)}
-@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.06)}}
-.env-hint{color:var(--sage);font-family:var(--caps);letter-spacing:.25em;font-size:.72rem;text-transform:uppercase}
+.env.opened .seal{opacity:0;transform:scale(.6);animation:none}
+.env-hint{color:var(--sage);font-family:var(--caps);letter-spacing:.25em;font-size:.72rem;text-transform:uppercase;z-index:2;animation:float 3s ease-in-out infinite}
 
 /* ===== HERO ===== */
-.hero{gap:6px;padding-top:10px}
-.hero .frog{width:170px;height:auto;margin-bottom:4px;animation:bob 4s ease-in-out infinite}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.name{font-family:var(--script);font-size:clamp(4rem,19vw,5.6rem);line-height:.95;color:var(--pond);margin:6px 0 2px;font-weight:400}
-.xv{font-family:var(--caps);letter-spacing:.42em;color:var(--gold);font-size:.95rem;padding-left:.42em}
-.quote{font-style:italic;font-size:1.12rem;margin-top:16px}
+.hero{gap:6px;padding-top:6px}
+.couple{position:relative;display:flex;align-items:flex-end;justify-content:center;width:100%;height:290px}
+.couple img{height:100%;width:auto;filter:drop-shadow(0 12px 20px rgba(47,74,51,.25))}
+.couple .girl{z-index:2;margin-right:-18px}
+.couple .boy{height:94%;z-index:1}
+.name{font-family:var(--script);font-size:clamp(4.6rem,22vw,6.4rem);line-height:.95;color:var(--pond);margin:10px 0 0;font-weight:400}
+.fullname{font-family:var(--caps);letter-spacing:.22em;font-size:.82rem;color:var(--ink-soft)}
+.xv{font-family:var(--caps);letter-spacing:.42em;color:var(--gold);font-size:1rem;padding-left:.42em;margin-top:6px}
+.quote{font-style:italic;font-size:1.12rem;margin-top:14px}
 
-/* ===== CUENTA REGRESIVA ===== */
-.count{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%}
-.count div{background:var(--paper);border:1px solid var(--sage);border-radius:50% 50% 12px 12px / 38% 38% 12px 12px;padding:16px 4px 10px;display:flex;flex-direction:column;align-items:center}
-.count b{font-family:var(--serif);font-weight:600;font-size:2rem;line-height:1;color:var(--pond);font-variant-numeric:tabular-nums}
-.count small{font-family:var(--caps);font-size:.6rem;letter-spacing:.18em;color:var(--gold);margin-top:6px}
-
-/* ===== CUÁNDO / DÓNDE ===== */
-.when{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
-.arch{border-radius:999px 999px 14px 14px;padding:34px 10px 22px;display:flex;flex-direction:column;align-items:center;gap:6px}
-.arch svg{width:34px;height:34px}
-.arch .big{font-family:var(--serif);font-size:1.5rem;font-weight:600;line-height:1.15}
-.arch .sm{font-family:var(--caps);font-size:.66rem;letter-spacing:.2em}
-.arch.gold{background:var(--gold);color:#fbf5e6}
-.arch.green{background:var(--moss);color:#f2f5ea}
-.stamp{width:100%;background:var(--moss);color:#f2f5ea;padding:26px 18px;position:relative;border-radius:8px;
-  box-shadow:inset 0 0 0 7px var(--moss),inset 0 0 0 8px var(--gold-lt);display:flex;flex-direction:column;align-items:center;gap:6px}
-.stamp .big{font-family:var(--caps);font-size:1rem;letter-spacing:.12em}
-.stamp .sm{font-size:1rem;opacity:.9}
-
-/* ===== BOTONES ===== */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--caps);letter-spacing:.18em;font-size:.78rem;text-transform:uppercase;
-  text-decoration:none;color:#fff;background:var(--pond);border:0;border-radius:999px;padding:15px 26px;cursor:pointer;transition:transform .15s ease,background .2s}
-.btn:hover{background:#3b5c3f;transform:translateY(-1px)}
-.btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-.btn svg{width:18px;height:18px}
-.btn.wa{background:#2f7d4a;width:100%}
-.btn.wa:hover{background:#286b40}
-
-/* ===== MAPA ===== */
-.mapcard{width:100%;border-radius:18px;overflow:hidden;border:1px solid var(--sage);background:var(--paper);text-decoration:none;color:inherit;display:block}
-.mapcard svg{display:block;width:100%;height:auto}
-.mapcard .meta{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left}
-.mapcard .meta b{font-family:var(--serif);font-size:1.1rem;color:var(--pond);display:block}
-.mapcard .meta span{font-size:.92rem;color:var(--ink-soft)}
-.mapcard .go{font-family:var(--caps);font-size:.66rem;letter-spacing:.18em;color:var(--gold);white-space:nowrap}
+/* ===== LEYENDA ===== */
+.legend{background:var(--paper);border:1px solid var(--sage);border-radius:200px 200px 24px 24px;padding:56px 26px 30px;width:100%;
+  box-shadow:0 0 0 8px var(--mist),0 0 0 9px var(--gold-lt)}
+.legend p{font-size:1.18rem;font-style:italic;color:var(--ink);max-width:30ch;margin:0 auto}
+.legend .sign{font-family:var(--script);font-size:1.9rem;color:var(--moss);font-style:normal;margin-top:12px}
 
 /* ===== GALERÍA ===== */
 .gallery{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
@@ -116,81 +134,102 @@ p{margin:0;max-width:34ch;color:var(--ink-soft)}
 .ph:nth-child(2){transform:rotate(2.5deg) translateY(14px)}
 .ph:nth-child(3){grid-column:1/-1;aspect-ratio:4/3;width:82%;justify-self:center;transform:rotate(-1.5deg)}
 
-/* ===== VESTIMENTA ===== */
+/* ===== ESCENA ===== */
+.scene{position:relative;width:100%;border-radius:22px;overflow:hidden;box-shadow:0 18px 40px rgba(20,38,28,.28);margin:0}
+.scene img{display:block;width:100%;height:auto}
+.scene figcaption{position:absolute;left:0;right:0;top:0;padding:18px 20px;color:#f4e9c4;text-align:center;background:linear-gradient(#14261ccc,#14261c00)}
+.scene figcaption b{display:block;font-family:var(--script);font-weight:400;font-size:2.3rem;line-height:1.1}
+
+/* ===== CUENTA ===== */
+.count{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%}
+.count div{background:var(--paper);border:1px solid var(--sage);border-radius:50% 50% 12px 12px / 38% 38% 12px 12px;padding:16px 4px 10px;display:flex;flex-direction:column;align-items:center}
+.count b{font-family:var(--serif);font-weight:600;font-size:2rem;line-height:1;color:var(--pond);font-variant-numeric:tabular-nums}
+.count small{font-family:var(--caps);font-size:.6rem;letter-spacing:.18em;color:var(--gold);margin-top:6px}
+
+/* ===== CUÁNDO ===== */
+.gator-row{display:flex;align-items:flex-start;justify-content:center;gap:2px;width:100%}
+.gator-row .gator{width:118px;height:auto;flex:none}
+.gator-row h2{font-size:3.5rem;margin-top:14px;white-space:nowrap}
+.when{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.arch{border-radius:999px 999px 14px 14px;padding:34px 10px 22px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.arch svg{width:34px;height:34px}
+.arch .big{font-family:var(--serif);font-size:1.5rem;font-weight:600;line-height:1.15}
+.arch .sm{font-family:var(--caps);font-size:.66rem;letter-spacing:.2em}
+.arch.gold{background:var(--gold);color:#fbf5e6}
+.arch.green{background:var(--moss);color:#f2f5ea}
+.stamp{width:100%;background:var(--moss);color:#f2f5ea;padding:26px 18px;border-radius:8px;
+  box-shadow:inset 0 0 0 7px var(--moss),inset 0 0 0 8px var(--gold-lt);display:flex;flex-direction:column;align-items:center;gap:6px}
+.stamp .big{font-family:var(--caps);font-size:1rem;letter-spacing:.12em}
+
+/* ===== BOTONES ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--caps);letter-spacing:.18em;font-size:.78rem;text-transform:uppercase;
+  text-decoration:none;color:#fff;background:var(--pond);border:0;border-radius:999px;padding:15px 26px;cursor:pointer;transition:transform .15s ease,background .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.btn svg{width:18px;height:18px}
+.btn.wa{background:#2f7d4a;width:100%}
+.btn.wa:hover{background:#286b40}
+
+/* ===== MAPA ===== */
+.how{display:flex;align-items:center;gap:8px;text-align:left}
+.how img{width:96px;height:auto;flex:none}
+.how div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.how h2{font-size:2.3rem;white-space:nowrap}
+.how p{font-size:1rem}
+.mapcard{width:100%;border-radius:18px;overflow:hidden;border:1px solid var(--sage);background:var(--paper);text-decoration:none;color:inherit;display:block}
+.mapcard svg{display:block;width:100%;height:auto}
+.mapcard .meta{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left}
+.mapcard .meta b{font-size:1.1rem;color:var(--pond);display:block}
+.mapcard .meta span{font-size:.92rem;color:var(--ink-soft)}
+.mapcard .go{font-family:var(--caps);font-size:.66rem;letter-spacing:.18em;color:var(--gold);white-space:nowrap}
+
+/* ===== VESTIMENTA / REGALOS ===== */
 .swatches{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .swatches i{width:30px;height:30px;border-radius:50%;border:2px solid var(--paper);outline:1px solid var(--sage)}
+.frogs{width:240px;max-width:80%;height:auto}
+.gifts{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.gifts div{background:var(--paper);border:1px solid var(--sage);border-radius:16px;padding:18px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:1.05rem}
+.gifts svg{width:34px;height:34px}
 
 /* ===== RSVP ===== */
 form{width:100%;background:var(--paper);border:1px solid var(--sage);border-radius:22px;padding:24px 20px;display:flex;flex-direction:column;gap:16px;text-align:left}
-label.lbl{font-family:var(--caps);font-size:.68rem;letter-spacing:.2em;color:var(--gold);display:block;margin-bottom:6px}
+.lbl{font-family:var(--caps);font-size:.68rem;letter-spacing:.2em;color:var(--gold);display:block;margin-bottom:6px}
 input[type=text],select{width:100%;font-family:var(--serif);font-size:1.15rem;color:var(--ink);background:#fff;border:1px solid var(--sage);border-radius:12px;padding:12px 14px}
 input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
+.guest-card{background:var(--mist);border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.guest-card b{font-size:1.25rem;color:var(--pond);display:block;line-height:1.2}
+.guest-card span{font-size:.9rem;color:var(--ink-soft)}
+.pass{flex:none;text-align:center;background:var(--gold);color:#fff;border-radius:12px;padding:8px 12px;font-family:var(--caps);font-size:.62rem;letter-spacing:.14em;line-height:1.3}
+.pass strong{display:block;font-family:var(--serif);font-size:1.6rem;letter-spacing:0}
 .choice{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .choice input{position:absolute;opacity:0;pointer-events:none}
 .choice label{display:flex;align-items:center;justify-content:center;text-align:center;min-height:56px;padding:10px;border-radius:12px;border:1px solid var(--sage);background:#fff;cursor:pointer;font-size:1.05rem;line-height:1.2;transition:background .2s,color .2s}
 .choice input:checked+label{background:var(--moss);color:#fff;border-color:var(--moss)}
 .choice input:focus-visible+label{outline:2px solid var(--gold);outline-offset:2px}
 .err{color:#9b3b2e;font-size:.98rem;min-height:1.2em;margin:-6px 0 0}
-.wa-num{font-size:.9rem;color:var(--ink-soft);text-align:center;max-width:none}
-.wa-num span{user-select:all;font-variant-numeric:tabular-nums}
 
 /* ===== MÚSICA ===== */
 #music{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;width:52px;height:52px;border-radius:50%;border:1px solid var(--gold);
   background:var(--paper);color:var(--pond);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 18px rgba(30,50,30,.2)}
 #music svg{width:22px;height:22px}
-#music.on svg{animation:spin 6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+#music.on svg{animation:sway 1.2s ease-in-out infinite}
 
-.end .name{font-size:3.4rem}
-/* Decoración del tema */
-.corner{position:absolute;top:-6px;width:150px;pointer-events:none;opacity:.95}
-.corner.r{right:-26px}
-.corner.l{left:-26px;transform:scaleX(-1)}
-.scene{position:relative;width:100%;border-radius:22px;overflow:hidden;box-shadow:0 18px 40px rgba(20,38,28,.28)}
-.scene img{display:block;width:100%;height:auto}
-.scene figcaption{position:absolute;left:0;right:0;top:0;padding:18px 20px;color:#f4e9c4;text-align:center;
-  background:linear-gradient(#14261ccc,#14261c00)}
-.scene figcaption b{display:block;font-family:var(--script);font-weight:400;font-size:2.2rem;line-height:1.1}
-.scene figcaption span{font-size:1rem;opacity:.9}
-.lily{width:100%;max-width:420px;height:auto;display:block;margin:0 auto -20px}
-.env-girl{position:absolute;left:-10%;bottom:-6%;height:104%;width:auto;z-index:3;pointer-events:none;filter:drop-shadow(0 10px 18px rgba(0,0,0,.35));transition:opacity .5s ease}
-.env.opened .env-girl{opacity:0}
-.hero-girl{height:300px;width:auto;max-width:100%;margin-bottom:4px;filter:drop-shadow(0 12px 20px rgba(47,74,51,.25))}
-.side-char{position:relative;width:100%}
-.side-char > img{position:absolute;pointer-events:none;height:auto}
-.gator-row{display:flex;align-items:flex-start;justify-content:center;gap:2px;width:100%}
-.gator-row .gator{width:118px;height:auto;flex:none;pointer-events:none}
-.gator-row h2{font-size:3.5rem;margin-top:14px;white-space:nowrap}
-.how{display:flex;align-items:center;gap:8px;text-align:left}
-.how img{width:96px;height:auto;flex:none}
-.how div{display:flex;flex-direction:column;gap:6px;min-width:0}
-.how h2{font-size:2.1rem;white-space:nowrap}
-.how p{font-size:1rem}
-.frogs{width:240px;max-width:80%;height:auto}
 .portrait{width:190px;height:190px;border-radius:50%;object-fit:cover;object-position:50% 20%;background:radial-gradient(circle at 50% 40%,#f8f6ee,#cfdcbc);
   border:3px solid var(--gold-lt);box-shadow:0 0 0 8px var(--paper),0 0 0 9px var(--sage)}
-.ph.empty{background:linear-gradient(160deg,#486a4a,#24382a)}
-.reveal{animation:rise .9s ease both}
-@keyframes rise{from{transform:translateY(14px);opacity:.0001}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.end .name{font-size:3.6rem}
+.divider{width:140px;height:18px;display:block;margin:0 auto}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
-<meta name="description" content="Te invito a celebrar mis XV años. Abre tu invitación.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Mis XV Años · Valentina">
-<meta property="og:description" content="Te invito a celebrar conmigo. Toca para abrir tu invitación.">
-<!-- Cambia TU-DOMINIO por el link final (ej. https://xv-valentina.vercel.app) -->
-<meta property="og:image" content="https://TU-DOMINIO/portada.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#2f4a33">
 </head>
-<body>
+<body class="locked">
 
 <canvas id="fireflies" aria-hidden="true"></canvas>
 
 <!-- ===== SOBRE ===== -->
 <div id="envelope" role="dialog" aria-label="Invitación cerrada">
+  <img class="fl sw tl" src="decoracion/flores/musgo.svg" alt="" style="top:0;left:0;width:100%;height:90px;opacity:.9">
+  <img class="fl sw2 bl" src="decoracion/rosas/rosas2.webp" alt="" style="left:-50px;bottom:-30px;width:210px">
+  <img class="fl sw2 br" src="decoracion/rosas/rosas4.webp" alt="" style="right:-50px;bottom:-30px;width:200px;transform:scaleX(-1)">
   <div class="env-for" id="envFor"></div>
   <div class="env" id="env">
     <div class="env-back"></div>
@@ -199,10 +238,9 @@ input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
       <path d="M0 0 L170 130 L340 0 L340 234 L0 234 Z" fill="#6f8e5e"/>
       <path d="M0 234 L170 120 L340 234 Z" fill="#5e7d4f"/>
     </svg>
-    <svg class="env-flap" viewBox="0 0 340 145" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M0 0 L340 0 L170 145 Z" fill="#7d9b6b"/>
-    </svg>
-    <img class="env-girl" src="decoracion/personajes/princesa.png" alt="" aria-hidden="true">
+    <svg class="env-flap" viewBox="0 0 340 145" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0 L340 0 L170 145 Z" fill="#7d9b6b"/></svg>
+    <img class="env-girl m-float" src="decoracion/personajes/princesa.png" alt="" aria-hidden="true">
+    <img class="env-boy m-sway" src="decoracion/personajes/principe.png" alt="" aria-hidden="true">
     <button class="seal" id="seal" aria-label="Abrir invitación">
       <svg viewBox="0 0 100 100">
         <defs><radialGradient id="wax" cx="40%" cy="35%"><stop offset="0" stop-color="#e6cd8f"/><stop offset=".6" stop-color="#b8955a"/><stop offset="1" stop-color="#8a6a36"/></radialGradient></defs>
@@ -216,39 +254,61 @@ input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
   <div class="env-hint">Toca el sello para abrir</div>
 </div>
 
+<img class="moss-top" src="decoracion/flores/musgo.svg" alt="" aria-hidden="true">
+
 <button id="music" aria-label="Pausar música" hidden>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
 </button>
 
 <main id="main" aria-hidden="true">
-  <img class="corner r" src="decoracion/flores-esquina.svg" alt="" aria-hidden="true">
-  <img class="corner l" src="decoracion/flores-esquina.svg" alt="" aria-hidden="true">
 
   <!-- HERO -->
   <section class="hero">
-    <img class="hero-girl" src="decoracion/personajes/princesa.png" alt="Princesa con un sapito en la mano">
-    <div class="caps">Te invito a celebrar</div>
-    <h1 class="name" data-f="nombre"></h1>
-    <div class="xv">MIS XV AÑOS</div>
-    <p class="quote" data-f="frase"></p>
+    <img class="fl sw tl" src="decoracion/rosas/rosas1.webp" alt="" style="top:-40px;left:-70px;width:200px">
+    <img class="fl sw tr" src="decoracion/flores/magnolia.svg" alt="" style="top:-20px;right:-40px;width:130px">
+    <img class="fl sw2 bl" src="decoracion/flores/iris.svg" alt="" style="left:-34px;top:150px;width:70px">
+    <img class="fl sw2 br" src="decoracion/flores/espadanas.svg" alt="" style="right:-30px;top:140px;width:62px">
+    <div class="couple rv-zoom">
+      <img class="girl m-float" src="decoracion/personajes/princesa.png" alt="Princesa con un sapito en la mano">
+      <img class="boy m-sway" src="decoracion/personajes/principe.png" alt="Príncipe" style="animation-delay:-1.4s">
+      <div class="sparkles" aria-hidden="true"><i style="left:20%;top:12%"></i><i style="left:62%;top:6%;animation-delay:.8s"></i><i style="left:35%;top:48%;animation-delay:1.5s"></i><i style="left:78%;top:40%;animation-delay:2s"></i><i style="left:10%;top:70%;animation-delay:1.1s"></i></div>
+    </div>
+    <div class="caps rv">Te invito a celebrar</div>
+    <h1 class="name split" data-f="nombre"></h1>
+    <div class="fullname rv" data-f="nombreCompleto"></div>
+    <div class="xv rv">MIS XV AÑOS</div>
+    <p class="quote rv" data-f="frase"></p>
   </section>
 
   <!-- GALERÍA -->
   <section>
-    <h2>Mis momentos</h2>
+    <img class="fl sw tr" src="decoracion/rosas/rosas3.webp" alt="" style="top:-30px;right:-60px;width:120px">
+    <h2 class="split">Mis momentos</h2>
     <div class="gallery" id="gallery"></div>
   </section>
 
-  <!-- ESCENA DEL PANTANO -->
-  <figure class="scene" style="margin:0">
-    <img src="decoracion/pantano-noche.svg" alt="Pantano de noche con luna, cipreses, nenúfares, luciérnagas y un sapito con corona" loading="lazy">
+  <!-- LEYENDA -->
+  <section>
+    <img class="fl sw tl" src="decoracion/flores/magnolia.svg" alt="" style="top:-34px;left:-24px;width:110px">
+    <img class="fl sw tr" src="decoracion/flores/magnolia.svg" alt="" style="top:-34px;right:-24px;width:110px;animation-delay:-2s">
+    <div class="legend rv">
+      <div class="caps" style="margin-bottom:12px">Para ti, Kyara</div>
+      <p data-f="leyenda"></p>
+      <div class="sign" data-f="firmaLeyenda"></div>
+    </div>
+  </section>
+
+  <!-- ESCENA -->
+  <figure class="scene rv-zoom">
+    <img src="decoracion/pantano-noche.svg" alt="Pantano de noche con luna, cipreses, nenúfares y luciérnagas" loading="lazy">
     <figcaption><b>Una noche mágica</b><span>donde los sueños se cumplen</span></figcaption>
   </figure>
 
   <!-- CUENTA REGRESIVA -->
   <section>
-    <h2>¿Cuánto falta?</h2>
-    <div class="count" role="timer" aria-live="off">
+    <img class="fl sw2 bl" src="decoracion/flores/iris.svg" alt="" style="left:-40px;bottom:-40px;width:66px">
+    <h2 class="split">¿Cuánto falta?</h2>
+    <div class="count rv" role="timer">
       <div><b id="cd-d">00</b><small>DÍAS</small></div>
       <div><b id="cd-h">00</b><small>HORAS</small></div>
       <div><b id="cd-m">00</b><small>MIN</small></div>
@@ -259,37 +319,37 @@ input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
   <!-- CUÁNDO -->
   <section>
     <div class="gator-row">
-      <img class="gator" src="decoracion/personajes/lagarto.png" alt="" aria-hidden="true">
-      <h2>Te espero</h2>
+      <img class="gator m-point rv-left" src="decoracion/personajes/lagarto.png" alt="" aria-hidden="true">
+      <h2 class="split">Te espero</h2>
     </div>
     <div class="when">
-      <div class="arch gold">
+      <div class="arch gold rv-left">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
         <span class="sm" data-f="diaSemana"></span>
         <span class="big" data-f="fechaCorta"></span>
       </div>
-      <div class="arch green">
+      <div class="arch green rv-right">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
         <span class="sm">A LAS</span>
         <span class="big" data-f="hora"></span>
       </div>
     </div>
-    <div class="stamp">
+    <div class="stamp rv">
       <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0114 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
       <span class="big" data-f="lugar"></span>
-      <span class="sm" data-f="ciudad"></span>
+      <span data-f="ciudad"></span>
     </div>
   </section>
 
-  <img class="lily" src="decoracion/nenufares.svg" alt="" aria-hidden="true">
+  <img class="lily m-float rv" src="decoracion/nenufares.svg" alt="" aria-hidden="true" style="width:100%;max-width:420px;margin:0 auto -30px;display:block">
 
   <!-- MAPA -->
   <section>
     <div class="how">
-      <img src="decoracion/personajes/sapo.png" alt="" aria-hidden="true">
-      <div><h2>¿Cómo llegar?</h2><p>Toca el mapa para abrir la ubicación en Google Maps.</p></div>
+      <img class="m-sway rv-left" src="decoracion/personajes/sapo.png" alt="" aria-hidden="true">
+      <div class="rv"><h2>¿Cómo llegar?</h2><p>Toca el mapa para abrir la ubicación en Google Maps.</p></div>
     </div>
-    <a class="mapcard" id="mapLink" target="_blank" rel="noopener">
+    <a class="mapcard rv" id="mapLink" target="_blank" rel="noopener">
       <svg viewBox="0 0 400 190" aria-hidden="true">
         <rect width="400" height="190" fill="#e4ecd8"/>
         <path d="M-10 140 C80 120 120 160 210 130 S340 90 410 110" stroke="#fff" stroke-width="14" fill="none"/>
@@ -297,41 +357,45 @@ input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
         <path d="M290 -10 C280 50 300 90 270 200" stroke="#fff" stroke-width="7" fill="none"/>
         <path d="M-10 60 C90 70 200 40 410 55" stroke="#fff" stroke-width="6" fill="none"/>
         <ellipse cx="350" cy="160" rx="70" ry="40" fill="#b9d3d6"/>
-        <circle cx="60" cy="40" r="18" fill="#cfdcbc"/><circle cx="230" cy="170" r="14" fill="#cfdcbc"/>
-        <g transform="translate(205 92)">
-          <ellipse cx="0" cy="34" rx="14" ry="4" fill="#2f4a33" opacity=".25"/>
-          <path d="M0 32 C-16 10 -20 0 -20 -8 a20 20 0 0140 0 C20 0 16 10 0 32z" fill="#2f4a33"/>
-          <circle cx="0" cy="-8" r="8" fill="#e3cf9f"/>
-        </g>
+        <g transform="translate(205 92)"><g class="m-float"><path d="M0 32 C-16 10 -20 0 -20 -8 a20 20 0 0140 0 C20 0 16 10 0 32z" fill="#2f4a33"/><circle cx="0" cy="-8" r="8" fill="#e3cf9f"/></g></g>
       </svg>
       <div class="meta"><div><b data-f="lugar"></b><span data-f="ciudad"></span></div><span class="go">Abrir mapa →</span></div>
     </a>
   </section>
 
-
   <!-- VESTIMENTA -->
   <section>
-    <h2>Código de vestimenta</h2>
-    <div class="caps" data-f="vestimenta"></div>
-    <div class="swatches" aria-hidden="true"><i style="background:#2f4a33"></i><i style="background:#5e7d4f"></i><i style="background:#b8955a"></i><i style="background:#e3cf9f"></i><i style="background:#f8f6ee"></i></div>
-    <p data-f="notaVestimenta"></p>
+    <img class="fl sw tr" src="decoracion/rosas/rosas2.webp" alt="" style="top:-30px;right:-60px;width:130px">
+    <h2 class="split">Código de vestimenta</h2>
+    <div class="caps rv" data-f="vestimenta"></div>
+    <div class="swatches rv" aria-hidden="true"><i style="background:#2f4a33"></i><i style="background:#5e7d4f"></i><i style="background:#b8955a"></i><i style="background:#e3cf9f"></i><i style="background:#f8f6ee"></i></div>
+    <p class="rv" data-f="notaVestimenta"></p>
   </section>
 
   <!-- REGALOS -->
   <section>
-    <img class="frogs" src="decoracion/personajes/sapos.png" alt="" aria-hidden="true">
-    <h2>Regalos</h2>
-    <p data-f="regalos"></p>
+    <img class="frogs m-hop" src="decoracion/personajes/sapos.png" alt="" aria-hidden="true">
+    <h2 class="split">Obsequio</h2>
+    <p class="rv" data-f="regalos"></p>
+    <div class="gifts">
+      <div class="rv-left"><svg viewBox="0 0 24 24" fill="none" stroke="#b8955a" stroke-width="1.3"><rect x="3" y="6" width="18" height="13" rx="1.5"/><path d="M3 7l9 6 9-6"/></svg>Sobre cerrado</div>
+      <div class="rv-right"><svg viewBox="0 0 24 24" fill="none" stroke="#b8955a" stroke-width="1.3"><rect x="3" y="9" width="18" height="12" rx="1"/><path d="M2 9h20M12 9v12M12 9c-2-4-7-5-7-2s4 2 7 2c3 0 7 1 7-2s-5-2-7 2"/></svg>Regalo</div>
+    </div>
   </section>
 
-  <img class="lily" src="decoracion/nenufares.svg" alt="" aria-hidden="true">
+  <img class="lily m-float rv" src="decoracion/nenufares.svg" alt="" aria-hidden="true" style="width:100%;max-width:420px;margin:0 auto -30px;display:block;animation-delay:-2s">
 
   <!-- RSVP -->
   <section id="rsvp">
-    <h2>Confirma tu asistencia</h2>
-    <p>Llena estos datos y tu confirmación se enviará por WhatsApp.</p>
-    <form id="form" novalidate>
-      <div>
+    <img class="fl sw tr" src="decoracion/rosas/rosas4.webp" alt="" style="top:-70px;right:-60px;width:110px">
+    <h2 class="split">Confirma tu asistencia</h2>
+    <p class="rv">Tu confirmación llegará por WhatsApp.</p>
+    <form id="form" class="rv" novalidate>
+      <div id="guestBox" hidden>
+        <span class="lbl">Invitación para</span>
+        <div class="guest-card"><div><b id="gName"></b><span>Invitación personal</span></div><div class="pass"><strong id="gPass">1</strong><span id="gPassTxt">ADMISIÓN</span></div></div>
+      </div>
+      <div id="nameBox">
         <label class="lbl" for="g-name">Tu nombre</label>
         <input type="text" id="g-name" autocomplete="name" placeholder="Ej. Familia Rodríguez">
       </div>
@@ -342,8 +406,8 @@ input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
           <input type="radio" name="att" id="att-no" value="no"><label for="att-no">No podré ir</label>
         </div>
       </div>
-      <div id="paxWrap">
-        <label class="lbl" for="g-pax">Número de personas</label>
+      <div id="paxWrap" hidden>
+        <label class="lbl" for="g-pax">¿Cuántos de tus pases usarás?</label>
         <select id="g-pax"></select>
       </div>
       <p class="err" id="err" role="alert"></p>
@@ -355,68 +419,90 @@ input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
   </section>
 
   <section class="end">
-    <img class="portrait" src="decoracion/personajes/princesa-retrato.png" alt="Princesa con un sapito" loading="lazy">
+    <img class="fl sw2 bl" src="decoracion/flores/espadanas.svg" alt="" style="left:-20px;bottom:0;width:60px">
+    <img class="fl sw2 br" src="decoracion/flores/iris.svg" alt="" style="right:-20px;bottom:0;width:66px;animation-delay:-3s">
+    <img class="portrait m-breathe rv-zoom" src="decoracion/personajes/princesa-retrato.png" alt="Princesa con un sapito" loading="lazy">
     <svg class="divider" viewBox="0 0 140 18" aria-hidden="true"><path d="M0 9h55M85 9h55" stroke="#b8955a"/><ellipse cx="70" cy="9" rx="9" ry="6" fill="#7aa35b"/><path d="M64 4l2-4 2 3 2-3 2 3 2-3 2 4z" fill="#b8955a"/></svg>
-    <p>Con todo mi cariño,</p>
-    <div class="name" data-f="nombre"></div>
+    <p class="rv">Con todo mi cariño,</p>
+    <div class="name split" data-f="nombre"></div>
   </section>
 </main>
 
+<script src="invitados.js"></script>
 <script>
 /* ============================================================
    DATOS DE LA INVITACIÓN — edita solo este bloque
+   Los invitados y sus pases se manejan en invitados.js (usa panel.html)
    ============================================================ */
 const CONFIG = {
-  nombre: "Valentina",
-  fechaISO: "2026-12-12T20:00:00-05:00",       // fecha y hora del evento (hora de Ecuador)
+  nombre: "Kyara",
+  nombreCompleto: "Kyara Pita Correa",
+  fechaISO: "2026-11-14T20:00:00-05:00",
   diaSemana: "SÁBADO",
-  fechaCorta: "12 / 12",
-  fechaLarga: "sábado 12 de diciembre",
-  hora: "20:00",
+  fechaCorta: "14 / 11",
+  fechaLarga: "sábado 14 de noviembre",
+  hora: "8:00 PM",
   lugar: "Salón de Eventos Colibrí",
   ciudad: "Santa Elena, Ecuador",
   mapa: "https://maps.app.goo.gl/FktU5XPHzKp8ZDXv8",
-  whatsapp: "593959534224",                      // sin + ni espacios
-  whatsappTxt: "+593 95 953 4224",
+  whatsapp: "593959534224",
   frase: "Hay sueños que se cumplen con un beso de valentía. Te espero para celebrar el mío.",
+  leyenda: "Quince años no son el final de un cuento: son el primer capítulo del tuyo. Que nunca te falte valor para perseguir tus sueños, ni la dulzura que hoy te hace brillar. Siempre serás nuestra princesa.",
+  firmaLeyenda: "Con amor, tu familia",
   vestimenta: "Formal",
   notaVestimenta: "El verde esmeralda queda reservado para la quinceañera.",
-  regalos: "El mejor regalo es tu presencia. Si deseas tener un detalle conmigo, habrá lluvia de sobres.",
-  fotos: ["fotos/foto1.jpg","fotos/foto2.jpg","fotos/foto3.jpg"],   // pon las fotos en la carpeta /fotos con estos nombres
-  musica: "",         // ej. "cancion.mp3" — si queda vacío suena una cajita musical
-  maxPersonas: 5
+  regalos: "El mejor regalo es tu presencia. Si deseas tener un detalle conmigo, puede ser:",
+  fotos: ["fotos/foto1.jpg","fotos/foto2.jpg","fotos/foto3.jpg"],
+  musica: "cancion.mp3",
+  pasesLinkGeneral: 1     // admisión cuando se abre el link sin código de invitado
 };
 </script>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
-  const qs = new URLSearchParams(location.search);
-  const guest = (qs.get("para") || "").trim();
-  const pases = parseInt(qs.get("pases") || "", 10);
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduce) document.documentElement.classList.add("anim");
 
   document.querySelectorAll("[data-f]").forEach(el => { el.textContent = CONFIG[el.dataset.f] || ""; });
   $("#mapLink").href = CONFIG.mapa;
 
-  // Sobre personalizado: ?para=Familia%20Pérez&pases=3
-  $("#envFor").innerHTML = guest
-    ? 'Invitación especial para<b></b>' + (pases > 0 ? (pases === 1 ? "1 pase" : pases + " pases") : "")
-    : "Tienes una invitación";
-  if (guest) $("#envFor b").textContent = guest;
-  if (guest) $("#g-name").value = guest;
+  // Partir títulos en letras para la transición
+  document.querySelectorAll(".split").forEach(el => {
+    const t = el.textContent; el.textContent = ""; el.setAttribute("aria-label", t);
+    [...t].forEach((c, i) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c; s.style.transitionDelay = (i * 45) + "ms"; s.setAttribute("aria-hidden","true"); el.appendChild(s); });
+  });
 
-  const maxP = pases > 0 ? pases : CONFIG.maxPersonas;
-  for (let i = 1; i <= maxP; i++) { const o = document.createElement("option"); o.value = i; o.textContent = i === 1 ? "1 persona" : i + " personas"; $("#g-pax").appendChild(o); }
-  if (pases > 0) $("#g-pax").value = pases;
+  // Invitado: ?i=CODIGO (lo genera panel.html)
+  const code = (new URLSearchParams(location.search).get("i") || "").trim().toUpperCase();
+  const list = Array.isArray(window.INVITADOS) ? window.INVITADOS : [];
+  const guest = code ? list.find(g => String(g.id).toUpperCase() === code) : null;
+  const pases = guest ? Math.max(1, parseInt(guest.pases, 10) || 1) : CONFIG.pasesLinkGeneral;
+  const plural = n => n === 1 ? "1 persona" : n + " personas";
+
+  if (guest) {
+    $("#envFor").innerHTML = 'Invitación especial para<b></b><small></small>';
+    $("#envFor b").textContent = guest.nombre;
+    $("#envFor small").textContent = "Admisión: " + plural(pases);
+    $("#guestBox").hidden = false; $("#nameBox").hidden = true;
+    $("#gName").textContent = guest.nombre;
+    $("#gPass").textContent = pases;
+    $("#gPassTxt").textContent = pases === 1 ? "PERSONA" : "PERSONAS";
+    if (pases > 1) {
+      $("#paxWrap").hidden = false;
+      for (let i = pases; i >= 1; i--) { const o = document.createElement("option"); o.value = i; o.textContent = i === pases ? `Todos (${plural(i)})` : plural(i); $("#g-pax").appendChild(o); }
+    }
+  } else {
+    $("#envFor").textContent = "Tienes una invitación";
+  }
 
   // Galería
   const g = $("#gallery");
-  for (let i = 0; i < 3; i++) {
-    const d = document.createElement("div"); d.className = "ph";
-    const empty = () => { d.classList.add("empty"); d.textContent = "Foto " + (i + 1); };
-    if (CONFIG.fotos[i]) { const im = document.createElement("img"); im.alt = "Foto de " + CONFIG.nombre; im.loading = "lazy"; im.onerror = () => { im.remove(); empty(); }; im.src = CONFIG.fotos[i]; d.appendChild(im); }
-    else empty();
-    g.appendChild(d);
-  }
+  CONFIG.fotos.slice(0, 3).forEach((src, i) => {
+    const d = document.createElement("div"); d.className = "ph rv-zoom"; d.style.transitionDelay = (i * 150) + "ms";
+    const empty = () => { d.textContent = "Foto " + (i + 1); };
+    const im = document.createElement("img"); im.alt = "Foto de " + CONFIG.nombre; im.loading = "lazy";
+    im.onerror = () => { im.remove(); empty(); }; im.src = src; d.appendChild(im); g.appendChild(d);
+  });
 
   // Cuenta regresiva
   const target = new Date(CONFIG.fechaISO).getTime();
@@ -432,83 +518,55 @@ const CONFIG = {
 
   // Mensaje de WhatsApp
   function buildMsg(){
-    const name = $("#g-name").value.trim();
+    const name = guest ? guest.nombre : $("#g-name").value.trim();
     const yes = $("#att-yes").checked;
-    const n = parseInt($("#g-pax").value, 10);
+    const ref = guest ? ` (código ${guest.id})` : "";
     if (yes) {
-      return `¡Hola! 👑🐸 Soy *${name}* y confirmo con mucha alegría que *SÍ asistiré* a los XV años de ${CONFIG.nombre}.\n` +
-             `Asistiremos: ${n} ${n === 1 ? "persona" : "personas"}.\n` +
+      const n = guest && pases > 1 ? parseInt($("#g-pax").value, 10) : pases;
+      const of = guest && pases > 1 && n < pases ? ` de ${pases} pases` : "";
+      return `¡Hola! 👑🐸 Soy *${name}*${ref} y confirmo con mucha alegría que *SÍ asistiré* a los XV años de ${CONFIG.nombre}.\n` +
+             `Asistiremos: *${plural(n)}*${of}.\n` +
              `¡Nos vemos el ${CONFIG.fechaLarga} a las ${CONFIG.hora} en ${CONFIG.lugar}! ✨`;
     }
-    return `Hola, soy *${name}*. Lamento mucho no poder asistir a los XV años de ${CONFIG.nombre}. ` +
-           `Le deseo una noche mágica e inolvidable. 💚`;
+    return `Hola, soy *${name}*${ref}. Lamento mucho no poder asistir a los XV años de ${CONFIG.nombre}. Le deseo una noche mágica e inolvidable. 💚`;
   }
   function refresh(){
-    $("#paxWrap").hidden = !$("#att-yes").checked;
+    $("#paxWrap").hidden = !(guest && pases > 1 && $("#att-yes").checked);
     $("#waBtn").href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(buildMsg());
-    if ($("#g-name").value.trim()) $("#err").textContent = "";
+    if (guest || $("#g-name").value.trim()) $("#err").textContent = "";
   }
   ["input","change"].forEach(ev => $("#form").addEventListener(ev, refresh));
   $("#form").addEventListener("submit", e => e.preventDefault());
   $("#waBtn").addEventListener("click", e => {
-    if (!$("#g-name").value.trim()) { e.preventDefault(); $("#err").textContent = "Escribe tu nombre para confirmar."; $("#g-name").focus(); }
+    if (!guest && !$("#g-name").value.trim()) { e.preventDefault(); $("#err").textContent = "Escribe tu nombre para confirmar."; $("#g-name").focus(); }
   });
   refresh();
 
-  // Música: archivo propio o cajita musical generada
-  let playing = false, audioEl = null, ctx = null, timer = null;
-  const melody = [ // vals 3/4 (nota MIDI, tiempos)
-    [72,1],[76,1],[79,1],[77,2],[76,1],[74,1],[72,1],[71,1],[72,3],
-    [69,1],[72,1],[76,1],[74,2],[72,1],[71,1],[67,1],[69,1],[67,3],
-    [72,1],[76,1],[79,1],[81,2],[79,1],[77,1],[76,1],[74,1],[76,3],
-    [74,1],[72,1],[71,1],[72,1],[76,1],[74,1],[72,3],[0,3]];
-  const bass = [48,55,52,53,48,45,43,48];
-  function note(f, t, d, v){
-    const o = ctx.createOscillator(), g2 = ctx.createGain();
-    o.type = "sine"; o.frequency.value = f;
-    g2.gain.setValueAtTime(0, t); g2.gain.linearRampToValueAtTime(v, t + .01); g2.gain.exponentialRampToValueAtTime(.0001, t + d);
-    o.connect(g2).connect(ctx.destination); o.start(t); o.stop(t + d + .05);
-  }
-  const hz = m => 440 * Math.pow(2, (m - 69) / 12);
-  function loop(){
-    const beat = .42; let t = ctx.currentTime + .1, i = 0;
-    melody.forEach(([m, b]) => { if (m) { note(hz(m), t, b * beat + .8, .12); note(hz(m) * 2, t, .5, .02); } t += b * beat; });
-    for (let k = 0, bt = ctx.currentTime + .1; k < 12; k++, bt += beat * 3) note(hz(bass[k % bass.length]), bt, 1.2, .06);
-    timer = setTimeout(loop, (t - ctx.currentTime) * 1000);
-  }
-  function startMusic(){
-    try {
-      if (CONFIG.musica) { audioEl = audioEl || new Audio(CONFIG.musica); audioEl.loop = true; audioEl.play().catch(()=>{}); }
-      else { ctx = ctx || new (window.AudioContext || window.webkitAudioContext)(); ctx.resume(); if (!timer) loop(); }
-      playing = true;
-    } catch(e) { playing = false; }
-    syncBtn();
-  }
-  function stopMusic(){
-    if (audioEl) audioEl.pause();
-    if (ctx) { ctx.suspend(); }
-    playing = false; syncBtn();
-  }
+  // Música
+  let playing = false; const audio = new Audio(CONFIG.musica); audio.loop = true; audio.preload = "auto";
   function syncBtn(){ const b = $("#music"); b.classList.toggle("on", playing); b.setAttribute("aria-label", playing ? "Pausar música" : "Reproducir música"); }
-  $("#music").addEventListener("click", () => playing ? stopMusic() : startMusic());
+  function play(){ audio.play().then(() => { playing = true; syncBtn(); }).catch(() => { playing = false; syncBtn(); }); }
+  $("#music").addEventListener("click", () => { if (playing) { audio.pause(); playing = false; syncBtn(); } else play(); });
+
+  // Revelado al hacer scroll
+  const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .18 }) : null;
+  function observe(){ document.querySelectorAll(".rv,.rv-zoom,.rv-left,.rv-right,.split").forEach(el => io ? io.observe(el) : el.classList.add("in")); }
 
   // Abrir sobre
-  document.body.classList.add("locked");
   $("#seal").addEventListener("click", () => {
     $("#env").classList.add("opened");
-    startMusic();
+    play();
     setTimeout(() => {
       $("#envelope").classList.add("open");
       document.body.classList.remove("locked");
       $("#main").removeAttribute("aria-hidden");
       $("#music").hidden = false;
-      document.querySelectorAll("main > section").forEach((s, i) => { s.style.animationDelay = (i * .08) + "s"; s.classList.add("reveal"); });
+      observe();
     }, 1500);
   });
 
   // Luciérnagas
   const cv = $("#fireflies"), c = cv.getContext("2d");
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   let W, H, flies = [];
   function size(){ W = cv.width = innerWidth * devicePixelRatio; H = cv.height = innerHeight * devicePixelRatio; cv.style.width = innerWidth + "px"; cv.style.height = innerHeight + "px"; }
   size(); addEventListener("resize", size);
@@ -528,6 +586,5 @@ const CONFIG = {
   requestAnimationFrame(draw);
 })();
 </script>
-
 </body>
 </html>

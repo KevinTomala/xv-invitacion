@@ -1,26 +1,23 @@
-# Invitación XV Años – tema del sapo y la princesa
+# Invitación XV Años – Kyara Pita Correa
 
-## 1. Editar datos
-Abre `index.html` y busca el bloque `const CONFIG = {` (al final del archivo):
-- nombre, fechaISO, diaSemana, fechaCorta, fechaLarga, hora
-- lugar, ciudad, mapa (link de Google Maps)
-- whatsapp (sin + ni espacios) y whatsappTxt
-- fotos: ya apuntan a fotos/foto1.jpg, foto2.jpg, foto3.jpg (ver fotos/LEEME.txt)
-- musica: "cancion.mp3" (vacío = cajita musical generada)
-- También cambia el nombre en <title> y en las etiquetas og:title.
+## Archivos
+- index.html → la invitación. Datos generales en el bloque `const CONFIG` (nombre, fecha, hora, lugar, textos).
+- invitados.js → lista de invitados con sus pases. NO lo edites a mano: usa panel.html.
+- panel.html → tu panel: agregar invitados, decidir pases, copiar/enviar links, marcar confirmados, imprimir lista, exportar Excel.
+- cancion.mp3 → música de fondo.
+- fotos/ → foto1.jpg, foto2.jpg (verticales), foto3.jpg (horizontal).
+- decoracion/personajes/ → PNG de personajes (se animan con CSS).
+- decoracion/flores/ y decoracion/rosas/ → flores (se mecen con CSS).
 
-## 2. Archivos
-- fotos/foto1.jpg, fotos/foto2.jpg (verticales), fotos/foto3.jpg (horizontal) → ~1080 px de ancho, < 300 KB c/u
-- cancion.mp3 → ~2 min, < 3 MB
-- portada.jpg → 1200x630, es la imagen que sale al compartir el link en WhatsApp
+## Flujo de invitados
+1. Abre panel.html (doble clic en tu PC, o TU-LINK/panel.html).
+2. Escribe el link de la invitación arriba, agrega invitados con su nombre, pases y teléfono.
+3. Toca "Descargar invitados.js", reemplaza el archivo en esta carpeta y haz git add . / git commit / git push.
+4. Envía a cada invitado su link (botón WhatsApp o Copiar link). Cada link tiene un código ?i=XXXXXX.
+5. Cuando te confirmen por WhatsApp, márcalos en la columna Estado. "Imprimir lista" saca la lista con casilla "Llegó" para la puerta.
 
-## 3. Publicar
-    npx vercel --prod
-Luego reemplaza TU-DOMINIO en la etiqueta og:image por el link final y vuelve a correr el comando.
+El link sin código vale para 1 persona (CONFIG.pasesLinkGeneral).
 
-## 4. Link personalizado por invitado
-    https://tu-link.vercel.app/?para=Familia%20Pérez&pases=3
-
-## Carpetas
-- fotos/ → fotos de la quinceañera
-- decoracion/ → ilustraciones del tema (pantano, nenúfares, flores). Puedes reemplazarlas con el mismo nombre.
+## Publicar
+git add . && git commit -m "cambios" && git push
+Luego cambia TU-DOMINIO en la etiqueta og:image por tu link real.
