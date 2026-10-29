@@ -158,8 +158,9 @@ input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
 .hero-girl{height:300px;width:auto;max-width:100%;margin-bottom:4px;filter:drop-shadow(0 12px 20px rgba(47,74,51,.25))}
 .side-char{position:relative;width:100%}
 .side-char > img{position:absolute;pointer-events:none;height:auto}
-.gator{width:120px;left:-14px;top:-30px}
-.when-wrap{padding-top:70px}
+.gator-row{display:flex;align-items:flex-start;justify-content:center;gap:2px;width:100%}
+.gator-row .gator{width:118px;height:auto;flex:none;pointer-events:none}
+.gator-row h2{font-size:3.5rem;margin-top:14px;white-space:nowrap}
 .how{display:flex;align-items:center;gap:8px;text-align:left}
 .how img{width:96px;height:auto;flex:none}
 .how div{display:flex;flex-direction:column;gap:6px;min-width:0}
@@ -257,7 +258,7 @@ input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
 
   <!-- CUÁNDO -->
   <section>
-    <div class="side-char when-wrap">
+    <div class="gator-row">
       <img class="gator" src="decoracion/personajes/lagarto.png" alt="" aria-hidden="true">
       <h2>Te espero</h2>
     </div>
