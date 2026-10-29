@@ -10,10 +10,14 @@
  */
 const TOKEN = '23c65e11e9b53cae2e7628c4af9116b0efe655aa4e49a5a5f6d16f5eac5f42b6';
 const HOJA = 'Invitados';
+// Solo si el script NO se creó desde la hoja (Extensiones → Apps Script): pega aquí el ID de la hoja
+// (lo que va entre /d/ y /edit en la URL de la hoja). Si se creó desde la hoja, déjalo vacío.
+const SHEET_ID = '';
 const COLS = ['id', 'nombre', 'pases', 'mesa', 'telefono', 'estado', 'q', 'firmado', 'actualizado'];
 
 function hoja_() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) throw new Error('El script no está unido a la hoja: créalo desde la hoja (Extensiones → Apps Script) o pon SHEET_ID');
   let sh = ss.getSheetByName(HOJA);
   if (!sh) sh = ss.insertSheet(HOJA);
   if (sh.getLastRow() === 0) {
@@ -33,6 +37,13 @@ function leer_(sh) {
 }
 function fila_(g) { return COLS.map(c => c === 'actualizado' ? new Date() : (g[c] == null ? '' : g[c])); }
 function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+
+// Prueba rápida: abre la URL /exec en el navegador
+function doGet() {
+  let hoja = 'ok';
+  try { hoja_(); } catch (err) { hoja = String(err.message || err); }
+  return json_({ ok: true, servicio: 'Invitados XV Kyara', hoja: hoja, token: TOKEN.slice(0, 8) });
+}
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
