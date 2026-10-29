@@ -133,7 +133,9 @@ const LLAVE_CIFRADA = {"salt":"32jFhxVvauRA4ZaCvgg0NQ","iv":"6ZqGG5vbpbOhoioA","
   const syncMsg = (t, cls) => { const el = $("#syncState"); el.textContent = t; el.className = cls || ""; };
   async function api(action, extra){
     const r = await fetch(SHEETS_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(Object.assign({ token: apiToken, action }, extra || {})) });
-    const j = await r.json(); if (!j.ok) throw new Error(j.error || "Error"); return j;
+    const txt = await r.text(); let j;
+    try { j = JSON.parse(txt); } catch(e){ throw new Error(/accounts\.google|ServiceLogin|<html/i.test(txt) ? "La hoja pide iniciar sesión: en Apps Script pon «Quién tiene acceso: Cualquier usuario»" : "Respuesta inesperada de la hoja"); }
+    if (!j.ok) throw new Error(j.error === "No autorizado" ? "Token incorrecto: pega el TOKEN nuevo en Apps Script y crea una Nueva versión" : (j.error || "Error")); return j;
   }
   async function flush(){
     if (!cloud() || !dirty.size) return;
@@ -153,7 +155,7 @@ const LLAVE_CIFRADA = {"salt":"32jFhxVvauRA4ZaCvgg0NQ","iv":"6ZqGG5vbpbOhoioA","
       if (rows.length) { list = rows.map(g => Object.assign(g, { pases: +g.pases || 1 })); store.set(KEY, JSON.stringify(list)); }
       else if (list.length) { await api("replace", { rows: list }); }
       syncMsg("☁ Sincronizado con Google Sheets", "st-si"); render();
-    } catch(e){ syncMsg("⚠ No se pudo conectar con la hoja. Se usa la copia de este equipo.", "st-no"); }
+    } catch(e){ syncMsg("⚠ No se pudo conectar con la hoja (" + (e.message === "Failed to fetch" ? "sin respuesta: revisa la URL de la implementación" : e.message) + "). Se usa la copia de este equipo.", "st-no"); }
   }
 
   const enc = new TextEncoder();
