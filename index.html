@@ -69,6 +69,7 @@ p{margin:0;max-width:34ch;color:var(--ink-soft)}
 .anim .rv-left{opacity:0;transform:translateX(-40px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
 .anim .rv-right{opacity:0;transform:translateX(40px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
 .anim .rv-left.in,.anim .rv-right.in{opacity:1;transform:none}
+.split .w{display:inline-block;white-space:nowrap}
 .split .ch{display:inline-block;white-space:pre}
 .anim .split .ch{opacity:0;transform:translateY(.4em) rotate(-8deg);filter:blur(3px);transition:opacity .5s ease,transform .6s cubic-bezier(.2,.7,.2,1),filter .5s ease}
 .anim .split.in .ch{opacity:1;transform:none;filter:none}
@@ -264,7 +265,7 @@ input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
 
   <!-- HERO -->
   <section class="hero">
-    <img class="fl sw tl" src="decoracion/rosas/rosas1.webp" alt="" style="top:-40px;left:-70px;width:200px">
+    <img class="fl sw tl" src="decoracion/rosas/rosas1.webp" alt="" style="top:-80px;left:calc(-1 * max(16px, (100vw - 460px) / 2));width:min(70vw,400px)">
     <img class="fl sw tr" src="decoracion/flores/magnolia.svg" alt="" style="top:-20px;right:-40px;width:130px">
     <img class="fl sw2 bl" src="decoracion/flores/iris.svg" alt="" style="left:-34px;top:150px;width:70px">
     <img class="fl sw2 br" src="decoracion/flores/espadanas.svg" alt="" style="right:-30px;top:140px;width:62px">
@@ -282,7 +283,6 @@ input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
 
   <!-- GALERÍA -->
   <section>
-    <img class="fl sw tr" src="decoracion/rosas/rosas3.webp" alt="" style="top:-30px;right:-60px;width:120px">
     <h2 class="split">Mis momentos</h2>
     <div class="gallery" id="gallery"></div>
   </section>
@@ -419,6 +419,7 @@ input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
   </section>
 
   <section class="end">
+    <img class="fl sw2 br" src="decoracion/rosas/rosas3.webp" alt="" style="right:calc(-1 * max(16px, (100vw - 460px) / 2));bottom:-90px;width:min(40vw,200px)">
     <img class="fl sw2 bl" src="decoracion/flores/espadanas.svg" alt="" style="left:-20px;bottom:0;width:60px">
     <img class="fl sw2 br" src="decoracion/flores/iris.svg" alt="" style="right:-20px;bottom:0;width:66px;animation-delay:-3s">
     <img class="portrait m-breathe rv-zoom" src="decoracion/personajes/princesa-retrato.png" alt="Princesa con un sapito" loading="lazy">
@@ -470,7 +471,12 @@ const LLAVE_PUBLICA = {"kty": "EC", "crv": "P-256", "x": "GLkjZReCnN6h-_XOrF7RiT
   // Partir títulos en letras para la transición
   document.querySelectorAll(".split").forEach(el => {
     const t = el.textContent; el.textContent = ""; el.setAttribute("aria-label", t);
-    [...t].forEach((c, i) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c; s.style.transitionDelay = (i * 45) + "ms"; s.setAttribute("aria-hidden","true"); el.appendChild(s); });
+    let i = 0;
+    t.split(" ").forEach((word, wi, arr) => {
+      const w = document.createElement("span"); w.className = "w"; w.setAttribute("aria-hidden","true");
+      [...word].forEach(c => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c; s.style.transitionDelay = (i++ * 45) + "ms"; w.appendChild(s); });
+      el.appendChild(w); if (wi < arr.length - 1) { el.appendChild(document.createTextNode(" ")); i++; }
+    });
   });
 
   // Invitado: ?d=DATOS&s=FIRMA (lo genera panel.html). Si alguien cambia algo, la firma ya no coincide.
