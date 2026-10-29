@@ -219,6 +219,29 @@ input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
   border:3px solid var(--gold-lt);box-shadow:0 0 0 8px var(--paper),0 0 0 9px var(--sage)}
 .end .name{font-size:3.6rem}
 .divider{width:140px;height:18px;display:block;margin:0 auto}
+/* ===== LETRAS DORADAS CON DESTELLOS ===== */
+:root{--gold-text:linear-gradient(105deg,#7d5b22 0%,#b8913f 22%,#e8cf8a 38%,#fff3cc 46%,#d9b766 54%,#a7822f 72%,#7d5b22 100%)}
+h2,.name,.legend .sign,.env-card span,.xv{
+  background:var(--gold-text);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  animation:shine 5s linear infinite;filter:drop-shadow(0 1px 0 rgba(90,60,20,.18))}
+h2 .ch,.name .ch{background:inherit;background-size:inherit;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:inherit}
+@keyframes shine{from{background-position:130% 0}to{background-position:-130% 0}}
+h2,.name{position:relative;padding-inline:.25em}
+h2::before,h2::after,.name::before,.name::after{content:"✦";position:absolute;-webkit-text-fill-color:#e2c37a;color:#e2c37a;font-family:serif;line-height:1;pointer-events:none;
+  text-shadow:0 0 8px rgba(255,236,170,.9);animation:twinkle 2.4s ease-in-out infinite}
+h2::before,.name::before{font-size:.38em;left:-.15em;top:.05em}
+h2::after,.name::after{font-size:.24em;right:-.1em;bottom:.15em;animation-delay:1.2s}
+h2{font-size:3.3rem}
+.name{font-size:clamp(5.2rem,25vw,7.2rem)}
+.end .name{font-size:4.4rem}
+.how h2{font-size:2.6rem}
+.gator-row h2{font-size:clamp(2.9rem,13vw,3.9rem)}
+.gator-row .gator{width:clamp(88px,25vw,118px)}
+.legend .sign{font-size:2.3rem}
+.xv{font-size:1.1rem;font-weight:600}
+.caps{font-size:.86rem}
+body{font-size:20px}
+p{color:#4b5843}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
