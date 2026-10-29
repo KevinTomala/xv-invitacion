@@ -428,11 +428,10 @@ input:focus,select:focus{outline:2px solid var(--moss);outline-offset:1px}
   </section>
 </main>
 
-<script src="invitados.js"></script>
 <script>
 /* ============================================================
    DATOS DE LA INVITACIÓN — edita solo este bloque
-   Los invitados y sus pases se manejan en invitados.js (usa panel.html)
+   Los invitados y sus pases se generan en panel.html (links firmados)
    ============================================================ */
 const CONFIG = {
   nombre: "Kyara",
@@ -454,11 +453,13 @@ const CONFIG = {
   regalos: "El mejor regalo es tu presencia. Si deseas tener un detalle conmigo, puede ser:",
   fotos: ["fotos/foto1.jpg","fotos/foto2.jpg","fotos/foto3.jpg"],
   musica: "cancion.mp3",
-  pasesLinkGeneral: 1     // admisión cuando se abre el link sin código de invitado
+  permitirLinkGeneral: false   // false = sin link firmado no se puede confirmar asistencia
 };
+/* Llave pública para verificar los links firmados (NO es secreta). La genera herramientas/nueva-clave.mjs */
+const LLAVE_PUBLICA = {"kty": "EC", "crv": "P-256", "x": "GLkjZReCnN6h-_XOrF7RiTo51amSj5E893nNZVLnB7U", "y": "LLKLoo7k0wGi5jKYiOvnZkGVbXXaXILpHvAT8Y7tOgg"};
 </script>
 <script>
-(function(){
+(async function(){
   const $ = s => document.querySelector(s);
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!reduce) document.documentElement.classList.add("anim");
@@ -472,11 +473,21 @@ const CONFIG = {
     [...t].forEach((c, i) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c; s.style.transitionDelay = (i * 45) + "ms"; s.setAttribute("aria-hidden","true"); el.appendChild(s); });
   });
 
-  // Invitado: ?i=CODIGO (lo genera panel.html)
-  const code = (new URLSearchParams(location.search).get("i") || "").trim().toUpperCase();
-  const list = Array.isArray(window.INVITADOS) ? window.INVITADOS : [];
-  const guest = code ? list.find(g => String(g.id).toUpperCase() === code) : null;
-  const pases = guest ? Math.max(1, parseInt(guest.pases, 10) || 1) : CONFIG.pasesLinkGeneral;
+  // Invitado: ?d=DATOS&s=FIRMA (lo genera panel.html). Si alguien cambia algo, la firma ya no coincide.
+  async function verifyGuest(){
+    try {
+      const q = new URLSearchParams(location.search), d = q.get("d"), sig = q.get("s");
+      if (!d || !sig || !window.crypto || !crypto.subtle) return null;
+      const fromB64u = t => Uint8Array.from(atob(t.replace(/-/g,"+").replace(/_/g,"/") + "===".slice((t.length + 3) % 4)), ch => ch.charCodeAt(0));
+      const key = await crypto.subtle.importKey("jwk", LLAVE_PUBLICA, { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
+      const ok = await crypto.subtle.verify({ name: "ECDSA", hash: "SHA-256" }, key, fromB64u(sig), new TextEncoder().encode(d));
+      if (!ok) return null;
+      const data = JSON.parse(new TextDecoder().decode(fromB64u(d)));
+      return { id: data.c, nombre: data.n, pases: data.p };
+    } catch (e) { return null; }
+  }
+  const guest = await verifyGuest();
+  const pases = guest ? Math.max(1, parseInt(guest.pases, 10) || 1) : 1;
   const plural = n => n === 1 ? "1 persona" : n + " personas";
 
   if (guest) {
@@ -493,6 +504,10 @@ const CONFIG = {
     }
   } else {
     $("#envFor").textContent = "Tienes una invitación";
+    if (!CONFIG.permitirLinkGeneral) {
+      $("#form").innerHTML = '<p style="text-align:center;margin:0 auto">Para confirmar tu asistencia necesitas tu <b>invitación personal</b>. Pídela a la familia de ' + CONFIG.nombre + '.</p>';
+      document.querySelector("#rsvp > p").hidden = true;
+    }
   }
 
   // Galería
@@ -530,14 +545,16 @@ const CONFIG = {
     }
     return `Hola, soy *${name}*${ref}. Lamento mucho no poder asistir a los XV años de ${CONFIG.nombre}. Le deseo una noche mágica e inolvidable. 💚`;
   }
+  const formOk = !!$("#waBtn");
   function refresh(){
+    if (!formOk) return;
     $("#paxWrap").hidden = !(guest && pases > 1 && $("#att-yes").checked);
     $("#waBtn").href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(buildMsg());
     if (guest || $("#g-name").value.trim()) $("#err").textContent = "";
   }
   ["input","change"].forEach(ev => $("#form").addEventListener(ev, refresh));
   $("#form").addEventListener("submit", e => e.preventDefault());
-  $("#waBtn").addEventListener("click", e => {
+  if (formOk) $("#waBtn").addEventListener("click", e => {
     if (!guest && !$("#g-name").value.trim()) { e.preventDefault(); $("#err").textContent = "Escribe tu nombre para confirmar."; $("#g-name").focus(); }
   });
   refresh();

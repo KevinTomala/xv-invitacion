@@ -75,20 +75,27 @@ code{font-size:.82rem;background:#f1f4ea;padding:2px 6px;border-radius:5px}
     <div class="stat"><b id="s-pend">0</b><span>Invitaciones pendientes</span></div>
   </div>
 
+  <form class="bar no-print" id="lockForm">
+    <label for="pw">Contraseña del panel</label>
+    <input id="pw" type="password" autocomplete="current-password" placeholder="Solo la anfitriona la conoce" style="min-width:240px">
+    <button id="unlock">Desbloquear</button>
+    <span id="lockState" class="st-pendiente">🔒 Bloqueado: no se pueden crear links</span>
+  </form>
+
   <div class="bar no-print">
     <label for="base">Link de la invitación</label>
     <input id="base" type="url" placeholder="https://kevintomala.github.io/xv-invitacion/">
     <button class="ghost" id="add">+ Agregar invitado</button>
     <button class="ghost" id="print">Imprimir lista</button>
     <button class="ghost" id="csv">Descargar Excel (CSV)</button>
-    <button id="export">Descargar invitados.js</button>
-    <button class="danger" id="reset">Recargar desde invitados.js</button>
+    <button class="ghost" id="backup">Descargar respaldo</button>
+    <label class="ghost" style="cursor:pointer;border:1px solid var(--pond);border-radius:8px;padding:8px 14px;color:var(--pond);font-size:15px">Cargar respaldo<input id="restore" type="file" accept=".json" hidden></label>
   </div>
 
   <div class="note no-print">
-    <b>Cómo funciona:</b> tú decides los pases de cada invitado; el invitado no puede cambiarlos. Los cambios se guardan en este navegador.
-    Cuando agregues o edites invitados, toca <b>Descargar invitados.js</b>, reemplaza el archivo en la carpeta del proyecto y haz <code>git push</code>: hasta entonces los links nuevos no funcionan.
-    Las confirmaciones llegan por WhatsApp; márcalas aquí en la columna Estado.
+    <b>Cómo funciona:</b> escribe la contraseña, agrega a cada invitado con sus pases y envíale su link. Cada link va <b>firmado</b>: si alguien cambia el nombre o los pases, la invitación lo rechaza, y sin la contraseña nadie puede crear links nuevos.
+    La lista se guarda en este navegador: usa <b>Descargar respaldo</b> de vez en cuando y <b>Cargar respaldo</b> para pasarla a otro equipo.
+    Si cambias el nombre o los pases de alguien, vuelve a enviarle su link nuevo. Las confirmaciones llegan por WhatsApp; márcalas en la columna Estado.
   </div>
 
   <div class="tbl">
@@ -100,91 +107,109 @@ code{font-size:.82rem;background:#f1f4ea;padding:2px 6px;border-radius:5px}
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="invitados.js"></script>
 <script>
+/* Llave privada CIFRADA con la contraseña del panel. Sin la contraseña no sirve. La genera herramientas/nueva-clave.mjs */
+const LLAVE_CIFRADA = {"salt": "Xv7rf8HaMaGhaeQc9_083g", "iv": "hXBci8TYucfYMHR5", "ct": "l8PYuInOovcW4b57jjpqau_H59inXWviY4AK_sLT9ELQNt36wB5hjPJgQtiuQSomAdVyxs_KF0ehp2fCkQo9ToNBE96_VofVEDxckRoQZ-6IWaWGHFPTEE5r6CtELDPMLnQR-BHw4zKAD8IJlpBQ6rp2gFWXY7q8RW2CvWGid3gj-DxoALk2mLZvCXg3ewQxbqAKjTodPxdJ8vCO1GTRDivGqWoQYodD1JvGTVM8Ze063ApOak16nrmZd_asOYit4x0sLlaVyuU4rPF5HiR9PqZ4wJSXVygkjwU9SFLt", "it": 310000};
 (function(){
-  const KEY = "xv-kyara-invitados", KB = "xv-kyara-base";
+  const KEY = "xv-kyara-panel", KB = "xv-kyara-base";
   const $ = s => document.querySelector(s);
   const store = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch(e){} } };
-  const fromFile = () => JSON.parse(JSON.stringify(window.INVITADOS || []));
-  let list; try { list = JSON.parse(store.get(KEY)) || fromFile(); } catch(e){ list = fromFile(); }
-  const defBase = location.protocol.startsWith("http") ? location.href.replace(/panel\.html.*$/,"") : "";
+  let list; try { list = JSON.parse(store.get(KEY)) || []; } catch(e){ list = []; }
+  const defBase = location.protocol.startsWith("http") ? location.href.replace(/panel\.html.*$/,"").split("?")[0] : "";
   $("#base").value = store.get(KB) || defBase;
+  let signKey = null;
+
+  const enc = new TextEncoder();
+  const b64u = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  const fromB64u = t => Uint8Array.from(atob(t.replace(/-/g,"+").replace(/_/g,"/") + "===".slice((t.length + 3) % 4)), c => c.charCodeAt(0));
+
+  async function unlock(pass){
+    const S = crypto.subtle;
+    const base = await S.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]);
+    const aes = await S.deriveKey({ name:"PBKDF2", salt: fromB64u(LLAVE_CIFRADA.salt), iterations: LLAVE_CIFRADA.it, hash:"SHA-256" }, base, { name:"AES-GCM", length:256 }, false, ["decrypt"]);
+    const raw = await S.decrypt({ name:"AES-GCM", iv: fromB64u(LLAVE_CIFRADA.iv) }, aes, fromB64u(LLAVE_CIFRADA.ct));
+    return S.importKey("jwk", JSON.parse(new TextDecoder().decode(raw)), { name:"ECDSA", namedCurve:"P-256" }, false, ["sign"]);
+  }
+  async function signGuest(g){
+    const d = b64u(enc.encode(JSON.stringify({ c: g.id, n: g.nombre.trim(), p: +g.pases })));
+    const sig = await crypto.subtle.sign({ name:"ECDSA", hash:"SHA-256" }, signKey, enc.encode(d));
+    g.q = "?d=" + d + "&s=" + b64u(sig); g.firmado = g.nombre.trim() + "|" + g.pases;
+  }
+  const stale = g => !g.q || g.firmado !== (g.nombre.trim() + "|" + g.pases);
 
   const ABC = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   const newId = () => { let id; do { id = Array.from({length:6}, () => ABC[Math.floor(Math.random()*ABC.length)]).join(""); } while (list.some(g => g.id === id)); return id; };
-  const link = g => { let b = $("#base").value.trim(); if (!b) return ""; if (!b.endsWith("/") && !b.endsWith(".html")) b += "/"; return b + "?i=" + g.id; };
-  const toast = t => { const el = $("#toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("on"), 1800); };
+  const link = g => { let b = $("#base").value.trim(); if (!b || stale(g)) return ""; if (!b.endsWith("/") && !b.endsWith(".html")) b += "/"; return b + g.q; };
+  const toast = t => { const el = $("#toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("on"), 2200); };
   const save = () => { store.set(KEY, JSON.stringify(list)); stats(); };
 
   function stats(){
     $("#s-inv").textContent = list.length;
     $("#s-pases").textContent = list.reduce((a,g) => a + (+g.pases||0), 0);
-    $("#s-si").textContent = list.filter(g => g.estado === "si").reduce((a,g) => a + (+(g.asisten || g.pases)||0), 0);
+    $("#s-si").textContent = list.filter(g => g.estado === "si").reduce((a,g) => a + (+g.pases||0), 0);
     $("#s-pend").textContent = list.filter(g => !g.estado || g.estado === "pendiente").length;
   }
+  const waText = g => { const n = +g.pases || 1; return `Hola ${g.nombre.trim()} 👑 Con mucho cariño te invito a mis XV años. Esta invitación es válida para ${n === 1 ? "1 persona" : n + " personas"}.\nÁbrela aquí: ${link(g)}`; };
 
-  function waText(g){
-    const n = +g.pases || 1;
-    return `Hola ${g.nombre} 👑 Con mucho cariño te invito a mis XV años. Esta invitación es válida para ${n === 1 ? "1 persona" : n + " personas"}.\nÁbrela aquí: ${link(g)}`;
-  }
-
+  let timer = {};
   function render(){
     const tb = $("#rows"); tb.innerHTML = "";
     list.forEach((g, i) => {
       const tr = document.createElement("tr");
       tr.innerHTML = `<td class="n">${i+1}</td>
-        <td><input class="nm" aria-label="Nombre del invitado" value=""></td>
+        <td><input class="nm" aria-label="Nombre del invitado"></td>
         <td><input class="ps" type="number" min="1" max="30" aria-label="Pases"></td>
         <td><input class="ms" aria-label="Mesa"></td>
         <td><input class="tel" inputmode="tel" placeholder="0991234567" aria-label="Teléfono"></td>
         <td><select aria-label="Estado"><option value="pendiente">Pendiente</option><option value="si">Confirmó</option><option value="no">No asiste</option></select></td>
         <td><code></code></td>
-        <td class="no-print"><div class="acts"><button class="ghost cp">Copiar link</button><a class="wa" target="_blank" rel="noopener">WhatsApp</a><button class="danger del" aria-label="Eliminar">✕</button></div></td>
+        <td class="no-print"><div class="acts"><button class="ghost cp">Copiar link</button><a class="wa" target="_blank" rel="noopener">WhatsApp</a><button class="danger del" aria-label="Eliminar">✕</button></div><small class="warn" style="color:var(--wait)"></small></td>
         <td class="print-only">☐</td>`;
       const [nm, ps, ms, tel] = tr.querySelectorAll("input"); const sel = tr.querySelector("select");
       nm.value = g.nombre || ""; ps.value = g.pases || 1; ms.value = g.mesa || ""; tel.value = g.telefono || ""; sel.value = g.estado || "pendiente";
       sel.className = "st-" + sel.value; tr.querySelector("code").textContent = g.id;
-      const wa = tr.querySelector("a.wa");
+      const wa = tr.querySelector("a.wa"), warn = tr.querySelector(".warn");
       const upd = () => {
-        const phone = (g.telefono || "").replace(/\D/g, "").replace(/^0/, "593");
-        wa.href = phone && link(g) ? `https://wa.me/${phone}?text=${encodeURIComponent(waText(g))}` : "#";
-        wa.setAttribute("aria-disabled", !(phone && link(g)));
-        wa.title = !link(g) ? "Primero escribe el link de la invitación" : !phone ? "Agrega el teléfono" : "Enviar invitación";
+        const phone = (g.telefono || "").replace(/\D/g, "").replace(/^0/, "593"), l = link(g);
+        wa.href = phone && l ? `https://wa.me/${phone}?text=${encodeURIComponent(waText(g))}` : "#";
+        wa.setAttribute("aria-disabled", !(phone && l));
+        warn.textContent = !g.nombre.trim() ? "" : stale(g) ? (signKey ? "Generando link…" : "Desbloquea para generar el link") : !$("#base").value.trim() ? "Falta el link de la invitación" : "";
       };
-      nm.oninput = () => { g.nombre = nm.value; save(); upd(); };
-      ps.oninput = () => { g.pases = Math.max(1, parseInt(ps.value,10) || 1); save(); upd(); };
+      const resign = () => { if (!signKey || !g.nombre.trim()) { upd(); return; } clearTimeout(timer[g.id]); timer[g.id] = setTimeout(async () => { await signGuest(g); save(); upd(); }, 400); upd(); };
+      nm.oninput = () => { g.nombre = nm.value; save(); resign(); };
+      ps.oninput = () => { g.pases = Math.max(1, parseInt(ps.value,10) || 1); save(); resign(); };
       ms.oninput = () => { g.mesa = ms.value; save(); };
       tel.oninput = () => { g.telefono = tel.value; save(); upd(); };
       sel.onchange = () => { g.estado = sel.value; sel.className = "st-" + sel.value; save(); };
       tr.querySelector(".cp").onclick = () => {
-        const l = link(g); if (!l) { toast("Primero escribe el link de la invitación"); $("#base").focus(); return; }
+        const l = link(g); if (!l) { toast(warn.textContent || "Escribe el nombre del invitado"); return; }
         navigator.clipboard.writeText(waText(g)).then(() => toast("Mensaje con link copiado"), () => toast(l));
       };
-      tr.querySelector(".del").onclick = () => { if (confirm(`¿Eliminar a ${g.nombre}?`)) { list.splice(i,1); save(); render(); } };
-      upd(); tb.appendChild(tr);
+      tr.querySelector(".del").onclick = () => { if (confirm(`¿Eliminar a ${g.nombre || "este invitado"}?`)) { list.splice(i,1); save(); render(); } };
+      upd(); if (stale(g)) resign(); tb.appendChild(tr);
     });
     stats();
   }
-
   function download(name, text, type){
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], {type})); a.download = name; document.body.appendChild(a); a.click(); a.remove();
   }
 
+  $("#lockForm").onsubmit = async e => {
+    e.preventDefault();
+    try { signKey = await unlock($("#pw").value); $("#pw").value = ""; $("#lockState").textContent = "🔓 Desbloqueado"; $("#lockState").className = "st-si"; toast("Panel desbloqueado"); render(); }
+    catch(err){ signKey = null; $("#lockState").textContent = "Contraseña incorrecta"; $("#lockState").className = "st-no"; }
+  };
   $("#base").oninput = () => { store.set(KB, $("#base").value.trim()); render(); };
   $("#add").onclick = () => { list.push({ id: newId(), nombre: "", pases: 1, telefono: "", mesa: "", estado: "pendiente" }); save(); render(); const ins = document.querySelectorAll("input.nm"); ins[ins.length-1].focus(); };
   $("#print").onclick = () => window.print();
-  $("#export").onclick = () => {
-    const body = "/* Lista de invitados. Edítala desde panel.html y reemplaza este archivo con el que descargues.\n   id: código único del link (?i=ID) · pases: admisión que TÚ decides · estado: pendiente | si | no */\nwindow.INVITADOS = " + JSON.stringify(list.map(({id,nombre,pases,telefono,mesa,estado}) => ({id,nombre,pases,telefono,mesa,estado})), null, 2) + ";\n";
-    download("invitados.js", body, "text/javascript"); toast("Reemplaza invitados.js en la carpeta y haz git push");
-  };
+  $("#backup").onclick = () => download("respaldo-invitados-kyara.json", JSON.stringify(list, null, 2), "application/json");
+  $("#restore").onchange = e => { const f = e.target.files[0]; if (!f) return; f.text().then(t => { const d = JSON.parse(t); if (!Array.isArray(d)) throw 0; if (list.length && !confirm("Esto reemplaza la lista actual por la del respaldo. ¿Continuar?")) return; list = d; save(); render(); toast("Respaldo cargado"); }).catch(() => toast("Ese archivo no es un respaldo válido")); e.target.value = ""; };
   $("#csv").onclick = () => {
     const esc = v => `"${String(v ?? "").replace(/"/g,'""')}"`;
     const est = { si: "Confirmó", no: "No asiste", pendiente: "Pendiente" };
     const rows = [["#","Invitado","Pases","Mesa","Teléfono","Estado","Código","Link"]].concat(list.map((g,i) => [i+1, g.nombre, g.pases, g.mesa, g.telefono, est[g.estado||"pendiente"], g.id, link(g)]));
     download("invitados-xv-kyara.csv", "﻿" + rows.map(r => r.map(esc).join(";")).join("\r\n"), "text/csv");
   };
-  $("#reset").onclick = () => { if (confirm("Esto descarta los cambios de este navegador y vuelve a la lista de invitados.js. ¿Continuar?")) { list = fromFile(); save(); render(); } };
   render();
 })();
 </script>
