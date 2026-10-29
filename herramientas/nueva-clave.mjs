@@ -18,4 +18,8 @@ const llave = { salt: b64u(salt), iv: b64u(iv), ct: b64u(ct), it: 310000 };
 const patch = (file, re, val) => { const t = readFileSync(file, 'utf8'); if (!re.test(t)) throw new Error('No encontré la llave en ' + file); writeFileSync(file, t.replace(re, val)); };
 patch('index.html', /const LLAVE_PUBLICA = \{.*?\};/s, 'const LLAVE_PUBLICA = ' + JSON.stringify(pub) + ';');
 patch('panel.html', /const LLAVE_CIFRADA = \{.*?\};/s, 'const LLAVE_CIFRADA = ' + JSON.stringify(llave) + ';');
+const h = await s.digest('SHA-256', new TextEncoder().encode('xv-sheets:' + JSON.parse(new TextDecoder().decode(priv)).d));
+const token = Buffer.from(h).toString('hex');
+patch('herramientas/google-sheets.gs', /const TOKEN = '[0-9a-f]*';/, "const TOKEN = '" + token + "';");
+console.log('TOKEN para Google Apps Script: ' + token + '  (ya actualizado en herramientas/google-sheets.gs: vuelve a pegarlo en Apps Script y crea una nueva versión de la implementación)');
 console.log('Listo. Nueva contraseña aplicada. Haz git add . && git commit && git push, y reenvía los links desde el panel.');
