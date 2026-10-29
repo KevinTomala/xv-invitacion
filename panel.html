@@ -46,6 +46,10 @@ code{font-size:.82rem;background:#f1f4ea;padding:2px 6px;border-radius:5px}
 .note{background:#fffaf0;border:1px solid #ecdcb5;border-radius:12px;padding:12px 14px;color:#5a4a2a;font-size:.9rem;line-height:1.5}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--pond);color:#fff;padding:10px 16px;border-radius:999px;opacity:0;transition:opacity .3s;pointer-events:none}
 .toast.on{opacity:1}
+.pwbox{position:relative;display:inline-flex;min-width:260px}
+.pwbox input{width:100%;padding-right:44px}
+.eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--soft);padding:6px;border-radius:6px;display:flex}
+.eye:hover{color:var(--pond);background:#f1f4ea}
 .print-only{display:none}
 @media print{
   body{background:#fff;padding:0;font-size:11pt}
@@ -77,7 +81,7 @@ code{font-size:.82rem;background:#f1f4ea;padding:2px 6px;border-radius:5px}
 
   <form class="bar no-print" id="lockForm">
     <label for="pw">Contraseña del panel</label>
-    <input id="pw" type="password" autocomplete="current-password" placeholder="Solo la anfitriona la conoce" style="min-width:240px">
+    <span class="pwbox"><input id="pw" type="password" autocomplete="current-password" placeholder="Solo la anfitriona la conoce"><button type="button" id="eye" class="eye" aria-label="Mostrar contraseña" title="Mostrar contraseña"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path class="slash" d="M3 3l18 18" hidden/></svg></button></span>
     <button id="unlock">Desbloquear</button>
     <span id="lockState" class="st-pendiente">🔒 Bloqueado: no se pueden crear links</span>
     <span id="syncState" style="color:var(--soft)"></span>
@@ -230,9 +234,14 @@ const LLAVE_CIFRADA = {"salt":"7GyWXQ5boJgexHr6u_ALZA","iv":"A7rihSajbZxHInto","
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], {type})); a.download = name; document.body.appendChild(a); a.click(); a.remove();
   }
 
+  $("#eye").onclick = () => {
+    const show = $("#pw").type === "password"; $("#pw").type = show ? "text" : "password";
+    $("#eye .slash").hidden = !show; const t = show ? "Ocultar contraseña" : "Mostrar contraseña";
+    $("#eye").setAttribute("aria-label", t); $("#eye").title = t; $("#pw").focus();
+  };
   $("#lockForm").onsubmit = async e => {
     e.preventDefault();
-    try { signKey = await unlock($("#pw").value); $("#pw").value = ""; $("#lockState").textContent = "🔓 Desbloqueado"; $("#lockState").className = "st-si"; toast("Panel desbloqueado"); render(); if (SHEETS_URL) { $("#reload").hidden = false; pull(); } }
+    try { signKey = await unlock($("#pw").value); $("#pw").value = ""; $("#pw").type = "password"; $("#eye .slash").hidden = true; $("#lockState").textContent = "🔓 Desbloqueado"; $("#lockState").className = "st-si"; toast("Panel desbloqueado"); render(); if (SHEETS_URL) { $("#reload").hidden = false; pull(); } }
     catch(err){ signKey = null; $("#lockState").textContent = "Contraseña incorrecta"; $("#lockState").className = "st-no"; }
   };
   $("#base").oninput = () => { store.set(KB, $("#base").value.trim()); render(); };
